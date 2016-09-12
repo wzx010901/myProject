@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RoleMapper">
+
+	<resultMap type="Role" id="roleResultMap">
+		<id column="role_id" property="roleId" />
+		<result column="roleName" property="roleName" />
+		<result column="rights" property="rights" />
+	</resultMap>
+
+	<!-- 字段 -->
+	<sql id="InsertField">
+		role_id,
+		role_name,
+		rights,
+		parent_id,
+		add_jurisdiction,
+		del_jurisdiction,
+		edit_jurisdiction,
+		find_jurisdiction
+	</sql>
+	<sql id="SelectField">
+		role_id as roleId,
+		role_name as roleName,
+		rights,
+		parent_id as
+		parentId,
+		add_jurisdiction as addJurisdiction,
+		del_jurisdiction as
+		delJurisdiction,
+		edit_jurisdiction as editJurisdiction,
+		find_jurisdiction as findJurisdiction
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{roleId},
+		#{roleName},
+		#{rights},
+		#{parentId},
+		#{addJurisdiction},
+		#{delJurisdiction},
+		#{editJurisdiction},
+		#{findJurisdiction}
+	</sql>
+
+	<!--表名 -->
+	<sql id="tableName">
+		sys_role
+	</sql>
+
+	<!-- 列出此组下的角色 -->
+	<select id="listAllRolesByPId" resultMap="roleResultMap">
+		select
+		<include refid="SelectField"></include>
+		from
+		<include refid="tableName"></include>
+		where
+		parent_id = #{roleId}
+		ORDER BY role_id
+	</select>
+
+	<!-- 通过id查找 -->
+	<select id="findObjectById" parameterType="pd" resultType="pd">
+		select
+		<include refid="SelectField"></include>
+		from
+		<include refid="tableName"></include>
+		where role_id = #{roleId}
+	</select>
+
+	<!-- 添加 -->
+	<insert id="insert" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="InsertField"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 保存修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set role_name = #{roleName}
+		where role_id = #{roleId}
+	</update>
+
+	<!-- 删除角色 -->
+	<delete id="deleteRoleById" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where role_id=#{roleId}
+	</delete>
+
+	<!-- 给当前角色附加菜单权限 -->
+	<update id="updateRoleRights" parameterType="Role">
+		update
+		<include refid="tableName"></include>
+		set rights=#{rights}
+		where role_id=#{roleId}
+	</update>
+
+	<!-- 通过id查找 -->
+	<select id="getRoleById" parameterType="String" resultMap="roleResultMap">
+		select
+		<include refid="SelectField"></include>
+		from
+		<include refid="tableName"></include>
+		where role_id=#{roleId}
+	</select>
+
+	<!-- 给全部子角色加菜单权限 -->
+	<update id="setAllRights" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set rights=#{rights}
+		where parent_id=#{roleId}
+	</update>
+
+	<!-- 新增权限 -->
+	<update id="addJurisdiction" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set add_jurisdiction=#{value}
+		where role_id=#{roleId}
+	</update>
+
+	<!-- 删除权限 -->
+	<update id="delJurisdiction" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set del_jurisdiction=#{value}
+		where role_id=#{roleId}
+	</update>
+
+	<!-- 修改权限 -->
+	<update id="editJurisdiction" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set edit_jurisdiction=#{value}
+		where role_id=#{roleId}
+	</update>
+
+	<!-- 查看权限 -->
+	<update id="findJurisdiction" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set find_jurisdiction=#{value}
+		where role_id=#{roleId}
+	</update>
+
+	<!-- wzx149156999 -->
+</mapper>

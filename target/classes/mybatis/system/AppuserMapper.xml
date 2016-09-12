@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AppuserMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		sys_app_user
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="InsertField">
+		user_id,
+		username,
+		password,
+		name,
+		rights,
+		role_id,
+		last_login,
+		ip,
+		status,
+		remark,
+		phone,
+		sfid,
+		start_time,
+		end_time,
+		years,
+		email,
+		number
+	</sql>
+	<sql id="SelectField">
+		user_id as userId,
+		username,
+		password,
+		name,
+		rights,
+		role_id as roleId,
+		last_login as lastLogin,
+		ip,
+		status,
+		remark,
+		phone,
+		sfid,
+		start_time as startTime,
+		end_time as endTime,
+		years,
+		email,
+		number
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{userId},
+		#{username},
+		#{password},
+		#{name},
+		#{rights},
+		#{roleId},
+		#{lastLogin},
+		#{ip},
+		#{status},
+		#{remark},
+		#{phone},
+		#{sfid},
+		#{startTime},
+		#{endTime},
+		#{years},
+		#{email},
+		#{number}	
+	</sql>
+	
+	<!-- 角色表 -->
+	<sql id="roleTableName">
+		SYS_ROLE
+	</sql>
+	
+	<!-- 列出某角色下的所有会员 -->
+	<select id="listAllAppuserByRorlid"  parameterType="pd" resultType="pd" >
+		select 
+			user_id as userId
+		from 
+		<include refid="tableName"></include>
+		where 
+			role_id = #{roleId}
+	</select>
+	
+	<!-- 会员列表 -->
+	<select id="userlistPage" parameterType="page" resultType="pd">
+		select  u.user_id as userId,
+				u.username,
+				u.password,
+				u.last_login as lastLogin,
+				u.name,
+				u.ip,
+				u.end_time as endTime,
+				u.years,
+				u.status,
+				u.email,
+				u.phone,
+				u.number,
+				r.role_id as roleId,
+				r.role_name as roleName
+		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
+		where u.role_id = r.role_id 
+		and r.parent_id = '2'
+		<if test="pd.keywords != null and pd.keywords!= ''"><!-- 关键词检索 -->
+			and (
+				u.username LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				u.email LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				or
+				u.number LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.roleId != null and pd.roleId != ''"><!-- 角色检索 -->
+			and u.role_id=#{pd.roleId} 
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 到期时间检索 -->
+			and u.end_time &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and u.end_time &lt;= #{pd.lastLoginEnd} 
+		</if>
+		<if test="pd.status != null and pd.status != ''"><!-- 状态检索 -->
+			and u.status=#{pd.status} 
+		</if>
+		order by u.name
+	</select>
+	
+	<!-- 通过username获取数据 -->
+	<select id="findByUsername" parameterType="pd" resultType="pd">
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			username = #{username}
+	</select>
+	
+	<!-- 通过邮箱获取数据 -->
+	<select id="findByEmail" parameterType="pd" resultType="pd">
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			email = #{email}
+		<if test="username != null and username != ''">
+			and username != #{username} 
+		</if>
+	</select>
+	
+	<!-- 通过编号获取数据 -->
+	<select id="findByNumber" parameterType="pd" resultType="pd">
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			number = #{number}
+		<if test="username != null and username != ''">
+			and username != #{username} 
+		</if>
+	</select>
+	
+	<!-- 新增会员 -->
+	<insert id="saveU" parameterType="pd">
+		insert into <include refid="tableName"></include> (
+			<include refid="SelectField"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除用户 -->
+	<delete id="deleteU" parameterType="pd">
+		delete from <include refid="tableName"></include> 
+		where 
+			user_id = #{userId}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="editU" parameterType="pd">
+		update  <include refid="tableName"></include>
+		set username				= #{username},
+			name					= #{name},
+			role_id 				= #{roleId},
+			remark					= #{remark},
+			phone 					= #{phone},
+			sfid 					= #{sfid},
+			start_time	 			= #{startTime},
+			end_time 				= #{endTime},
+			years					= #{years},
+			status 					= #{status},
+			email					= #{email},
+			number 					= #{number}
+		<if test="password != null and password != ''">
+			,password				= #{password}
+		</if>
+		where 
+			user_id = #{userId}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findByUiId" parameterType="pd" resultType="pd">
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			user_id = #{userId}
+	</select>
+	
+	<!-- 全部会员 -->
+	<select id="listAllUser" parameterType="pd" resultType="pd">
+		select  u.user_id as userId,
+				u.username,
+				u.password,
+				u.last_login as lastLogin,
+				u.name,
+				u.ip,
+				u.end_time as endTime,
+				u.years,
+				u.status,
+				u.email,
+				u.phone,
+				u.sfid,
+				u.number,
+				r.role_id as roleId,
+				r.role_name as roleName 
+		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
+		where u.role_id = r.role_id 
+		and r.parent_id = '2'
+		<if test="keywords != null and keywords!= ''"><!-- 关键词检索 -->
+			and (
+				u.username LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+				or
+				u.email LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+				or
+				u.number LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+		</if>
+		<if test="roleId != null and roleId != ''"><!-- 角色检索 -->
+			and u.role_id=#{roleId} 
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''"><!-- 到期时间检索 -->
+			and u.end_time &gt;= #{lastLoginStart} 
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''"><!-- 到期时间检索 -->
+			and u.end_time &lt;= #{lastLoginEnd} 
+		</if>
+		<if test="status != null and status != ''"><!-- 状态检索 -->
+			and u.status=#{status} 
+		</if>
+		order by u.name
+	</select>
+	
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllU" parameterType="String">
+		delete from <include refid="tableName"></include>
+		where 
+			user_id in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+	</delete>
+	
+	<!-- 获取总数 -->
+	<select id="getAppUserCount" parameterType="String" resultType="pd">
+		select 
+			count(user_id) appUserCount
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- zx QQ149156999(碌碌) -->
+</mapper>

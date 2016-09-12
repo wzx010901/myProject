@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+	<resultMap type="User" id="userAndRoleResultMap">
+		<id column="user_id" property="userId"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="name" property="name"/>
+		<result column="rights" property="rights"/>
+		<result column="lastLogin" property="lastLogin"/>
+		<result column="ip" property="ip"/>
+		<result column="status" property="status"/>
+		<result column="skin" property="skin"/>
+		<association property="role" column="roleId" javaType="Role">
+			<id column="roleId" property="roleId"/>
+			<result column="roleName" property="roleName"/>
+			<result column="roleRights" property="rights"/>
+		</association>
+	</resultMap>
+	<resultMap type="User" id="userResultMap">
+		<id column="user_id" property="userId"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+		<result column="name" property="name"/>
+		<result column="rights" property="rights"/>
+		<result column="last_login" property="lastLogin"/>
+		<result column="ip" property="ip"/>
+		<result column="status" property="status"/>
+		<result column="role_id" property="roleId"/>
+		<result column="skin" property="skin"/>
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		sys_user
+	</sql>
+	<sql id="roleTableName">
+		sys_role
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="InsertField">
+		user_id,
+		username,
+		password,
+		name,
+		rights,
+		role_id,
+		last_login,
+		ip,
+		status,
+		remark,
+		skin,
+		email,
+		number,
+		phone
+	</sql>
+	<sql id="SelectField">
+		user_id as userId,
+		username,
+		password,
+		name,
+		rights,
+		role_id as roleId,
+		last_login as lastogin,
+		ip,
+		status,
+		remark,
+		skin,
+		email,
+		number,
+		phone
+	</sql>
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{userId},
+		#{username},
+		#{password},
+		#{name},
+		#{rights},
+		#{roleId},
+		#{lastLogin},
+		#{ip},
+		#{status},
+		#{remark},
+		#{skin},
+		#{email},
+		#{number},
+		#{phone}
+	</sql>
+	
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="pd" resultType="pd">
+		select <include refid="SelectField"></include> from
+		<include refid="tableName"></include>
+		where 1=1
+		<if test="username!=null and password!=null">
+		and username = #{username} and password=#{password}
+		</if>
+		<if test="userId!=null and userId>0">
+		and user_id = #{userId}
+		</if>
+	</select>
+	
+	<!-- 更新登录时间 -->
+	<update id="updateLastLogin" parameterType="pd" >
+		update
+		<include refid="tableName"></include>
+		set 
+		last_login = #{lastLogin} 
+		where user_id = #{userId}
+	</update>
+	
+	<!-- 通过用户ID获取用户信息和角色信息 -->
+	<select id="getUserAndRoleById" parameterType="String" resultMap="userAndRoleResultMap">
+		select  u.user_id as userId  ,
+				u.username,
+				u.name,
+				u.rights as userRights,
+				u.password,
+				u.skin,
+				r.role_id as roleId,
+				r.role_name as roleName,
+				r.rights as roleRights 
+		from 
+		<include refid="tableName"></include> u 
+		left join 
+		<include refid="roleTableName"></include> r 
+		on u.role_id=r.role_id 
+		where u.status=0 
+		and u.user_id=#{userId}
+	</select>
+	
+	<!-- 通过username获取数据 -->
+	<select id="findByUsername" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			username = #{username}
+	</select>
+	
+	<!-- 存入IP -->
+	<update id="saveIP" parameterType="pd" >
+		update 
+		<include refid="tableName"></include> 
+		set 
+			ip = #{ip}
+		where 
+			username = #{username}
+	</update>
+	
+	<!-- 列出某角色下的所有用户 -->
+	<select id="listAllUserByRoldId"  parameterType="pd" resultType="pd" >
+		select user_id as userId
+		from 
+		<include refid="tableName"></include>
+		where 
+		role_id = #{roleId}
+	</select>
+	
+	<!-- 用户列表 -->
+	<select id="userlistPage" parameterType="page" resultType="pd" >
+		select  u.user_id as userId,
+				u.username,
+				u.password,
+				u.last_login as lastLogin,
+				u.name,
+				u.ip,
+				u.email,
+				u.number,
+				u.phone,
+				r.role_id as roleId,
+				r.role_name as roleName
+		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
+		where u.role_id = r.role_id 
+		and u.username != 'admin'
+		and r.parent_id = '1'
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					 u.username LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					 u.email LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+					 or
+					 u.number LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or
+					 u.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or
+					 u.phone LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		<if test="pd.roleId != null and pd.roleId != ''"><!-- 角色检索 -->
+			and u.role_id=#{pd.roleId} 
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u.last_login &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u.last_login &lt;= #{pd.lastLoginEnd} 
+		</if>
+		order by u.last_login desc
+	</select>
+	
+	<!-- 通过邮箱获取数据 -->
+	<select id="findByUE" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			email = #{email}
+		<if test="username != null and username != ''">
+			and username != #{username} 
+		</if>
+	</select>
+	
+	<!-- 通过编号获取数据 -->
+	<select id="findByUN" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			number = #{number}
+		<if test="username != null and username != ''">
+			and username != #{username} 
+		</if>
+	</select>
+	
+	<!-- 通过user_id获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd" >
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			user_id = #{userId}
+	</select>
+	
+	<!-- 新增用户 -->
+	<insert id="saveU" parameterType="pd" >
+		insert into <include refid="tableName"></include> (
+			<include refid="InsertField"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="editU" parameterType="pd" >
+		update  <include refid="tableName"></include>
+			set name 					= #{name},
+				role_id 				= #{roleId},
+				remark					= #{remark},
+				email					= #{email},
+				number					= #{number},
+				phone					= #{phone}
+			<if test="password != null and password != ''">
+				,password				= #{password}
+			</if>
+			where 
+				user_id = #{userId}
+	</update>
+	
+	<!-- 删除用户 -->
+	<delete id="deleteU" parameterType="pd" flushCache="false">
+		delete from <include refid="tableName"></include>
+		where 
+			user_id = #{userId}
+		and 
+				user_id != '1'
+	</delete>
+	
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllU" parameterType="String" >
+		delete from <include refid="tableName"></include>
+		where 
+			user_id in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+            and 
+				user_id != '1'
+	</delete>
+	
+	<!-- 用户列表(全部) -->
+	<select id="listAllUser" parameterType="pd" resultType="pd" >
+		select  u.user_id as userId,
+				u.username,
+				u.password,
+				u.last_login as lastLogin,
+				u.name,
+				u.ip,
+				u.email,
+				u.number,
+				u.phone,
+				r.role_id as roleId,
+				r.role_name as roleName
+		from <include refid="tableName"></include> u, <include refid="roleTableName"></include> r 
+		where u.role_id = r.role_id 
+		and u.username != 'admin'
+		and r.parent_id = '1'
+		<if test="keywords!= null and keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					 u.username LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or 
+					 u.email LIKE CONCAT(CONCAT('%', #{keywords}),'%') 
+					 or
+					 u.number LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or
+					 u.name LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+					 or
+					 u.phone LIKE CONCAT(CONCAT('%', #{keywords}),'%')
+				)
+		</if>
+		<if test="roleId != null and roleId != ''"><!-- 角色检索 -->
+			and u.role_id=#{roleId} 
+		</if>
+		<if test="lastLoginStart!=null and lastLoginStart!=''"><!-- 登录时间检索 -->
+			and u.last_login &gt;= #{lastLoginStart} 
+		</if>
+		<if test="lastLoginEnd!=null and lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and u.last_login &lt;= #{lastLoginEnd} 
+		</if>
+		order by u.last_login desc
+	</select>
+	
+	<!-- 获取总数 -->
+	<select id="getUserCount" parameterType="String" resultType="pd">
+		select 
+			count(user_id) userCount
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- wzx149156999 -->
+</mapper>

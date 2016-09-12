@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FhsmsMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		sys_fhsms
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="InsertField">
+		content,	
+		type,	
+		to_username,	
+		from_username,	
+		send_time,	
+		status,	
+		fhsms_id,
+		sanme_id
+	</sql>
+	<sql id="SelectField">
+		content,	
+		type,	
+		to_username as toUsername,	
+		from_username as fromUsername,	
+		send_time as sendTime,	
+		status,	
+		fhsms_id as fhsmsId,
+		sanme_id as sanmeId
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{content},	
+		#{type},	
+		#{toUsername},	
+		#{fromUsername},	
+		#{sendTime},	
+		#{status},	
+		#{fhsmsId},
+		#{sanmeId}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="InsertField"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			fhsms_id = #{fhsmsId}
+	</delete>
+	
+	<!-- 修改 状态-->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			status = '1'
+		where 
+		sanme_id = #{sanmeId}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			fhsms_id = #{fhsmsId}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+			from_username = #{pd.fromUsername}
+		and
+			type = #{pd.type}
+		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+					from_username LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					to_username LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					 or 
+					content LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				)
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 开始时间检索 -->
+			and send_time &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 结束时间检索 -->
+			and send_time &lt;= #{pd.lastLoginEnd} 
+		</if>
+		<if test="pd.status != null and pd.status != ''"><!-- 状态检索 -->
+			and status = #{pd.status} 
+		</if>
+		order by status desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!-- 获取未读总数 -->
+	<select id="findFhsmsCount" parameterType="String" resultType="pd">
+		select 
+			count(fhsms_id) fhsmsCount
+		from 
+		<include refid="tableName"></include>
+		where 
+			status = '2'
+		and
+			type = '1'
+		and
+			from_username = #{username} 
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			fhsms_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- wzx149156999 -->
+</mapper>

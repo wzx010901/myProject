@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ImgmsgMapper">
+
+
+	<!--表名 -->
+	<sql id="tableName">
+		weixin_imgmsg
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="InsertField">
+		keyword,
+		create_time,
+		status,
+		remark,
+		title1,
+		description1,
+		imgurl1,
+		tourl1,
+		title2,
+		description2,
+		imgurl2,
+		tourl2,
+		title3,
+		description3,
+		imgurl3,
+		tourl3,
+		title4,
+		description4,
+		imgurl4,
+		tourl4,
+		title5,
+		description5,
+		imgurl5,
+		tourl5,
+		title6,
+		description6,
+		imgurl6,
+		tourl6,
+		title7,
+		description7,
+		imgurl7,
+		tourl7,
+		title8,
+		description8,
+		imgurl8,
+		tourl8,
+		imgmsg_id
+	</sql>
+	<sql id="SelectField">
+		keyword,
+		create_time as createTime,
+		status,
+		remark,
+		title1,
+		description1,
+		imgurl1,
+		tourl1,
+		title2,
+		description2,
+		imgurl2,
+		tourl2,
+		title3,
+		description3,
+		imgurl3,
+		tourl3,
+		title4,
+		description4,
+		imgurl4,
+		tourl4,
+		title5,
+		description5,
+		imgurl5,
+		tourl5,
+		title6,
+		description6,
+		imgurl6,
+		tourl6,
+		title7,
+		description7,
+		imgurl7,
+		tourl7,
+		title8,
+		description8,
+		imgurl8,
+		tourl8,
+		imgmsg_id as imgmsgId
+	</sql>
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{keyword},
+		#{createTime},
+		#{status},
+		#{remark},
+		#{title1},
+		#{description1},
+		#{imgurl1},
+		#{tourl1},
+		#{title2},
+		#{description2},
+		#{imgurl2},
+		#{tourl2},
+		#{title3},
+		#{description3},
+		#{imgurl3},
+		#{tourl3},
+		#{title4},
+		#{description4},
+		#{imgurl4},
+		#{tourl4},
+		#{title5},
+		#{description5},
+		#{imgurl5},
+		#{tourl5},
+		#{title6},
+		#{description6},
+		#{imgurl6},
+		#{tourl6},
+		#{title7},
+		#{description7},
+		#{imgurl7},
+		#{tourl7},
+		#{title8},
+		#{description8},
+		#{imgurl8},
+		#{tourl8},
+		#{imgmsgId}
+	</sql>
+
+
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into <include refid="tableName"></include> (
+			<include refid="InsertField"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterType="pd">
+		delete from <include refid="tableName"></include>
+		where
+		imgmsg_id = #{imgmsgId}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update <include refid="tableName"></include>
+		set
+		keyword = #{keyword},
+		status = #{status},
+		remark = #{remark},
+		title1 = #{title1},
+		description1 = #{description1},
+		imgurl1 = #{imgurl1},
+		tourl1 = 
+		#{tourl1},
+		title2 = #{title2},
+		description2 = #{description2},
+		imgurl2 =
+		#{imgurl2},
+		tourl2 = #{tourl2},
+		title3 = #{title3},
+		description3 =
+		#{description3},
+		imgurl3 = #{imgurl3},
+		tourl3 = #{tourl3},
+		title4 =
+		#{title4},
+		description4 = #{description4},
+		imgurl4 = #{imgurl4},
+		tourl4 =
+		#{tourl4},
+		title5 = #{title5},
+		description5 = #{description5},
+		imgurl5 =
+		#{imgurl5},
+		tourl5 = #{tourl5},
+		title6 = #{title6},
+		description6 =
+		#{description6},
+		imgurl6 = #{imgurl6},
+		tourl6 = #{tourl6},
+		title7 =
+		#{title7},
+		description7 = #{description7},
+		imgurl7 = #{imgurl7},
+		tourl7 =
+		#{tourl7},
+		title8 = #{title8},
+		description8 = #{description8},
+		imgurl8 =
+		#{imgurl8},
+		tourl8 = #{tourl8},
+		imgmsg_id = imgmsg_id
+		where
+		imgmsg_id =
+		#{imgmsgId}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+			<include refid="SelectField"></include>
+		from
+			<include refid="tableName"></include>
+		where
+		imgmsg_id = #{imgmsgId}
+	</select>
+
+	<!-- 匹配关键词 -->
+	<select id="findByKw" parameterType="pd" resultType="pd"
+		useCache="false">
+		select
+			<include refid="SelectField"></include>
+		from
+			<include refid="tableName"></include>
+		where
+		keyword = #{keyword}
+		<if test="imgmsgId != null and imgmsgId != ''">
+			and imgmsg_id != #{imgmsgId}
+		</if>
+		<if test="status == null or status == ''">
+			and status = '1'
+		</if>
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			<include refid="SelectField"></include>
+		from
+			<include refid="tableName"></include>
+		where
+		1=1
+		<if test="pd.keyword != null and pd.keyword != ''"><!-- 关键词检索 -->
+			and keyword LIKE CONCAT(CONCAT('%', #{pd.keyword}),'%')
+		</if>
+		<if test="pd.status!=null and pd.status!='' and pd.status!=0"><!-- 状态检索 -->
+			and status = #{pd.status}
+		</if>
+		order by create_time desc
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+			<include refid="SelectField"></include>
+		from
+			<include refid="tableName"></include>
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from <include refid="tableName"></include>
+		where
+		imgmsg_id in
+		<foreach item="item" index="index" collection="array" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- ZX QQ 149156999 -->
+</mapper>

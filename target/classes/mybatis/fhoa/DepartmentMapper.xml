@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DepartmentMapper">
+	
+	<resultMap type="Department" id="departmentResultMap">
+		<id column="departmentId" property="departmentId"/>
+		<result column="name" property="name"/>
+		<result column="parentId" property="parentId"/>
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		oa_department
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="InsertField">
+		name,	
+		name_en,	
+		encoding,	
+		parent_id,
+		headman,
+		tel,
+		functions,
+		address,
+		remark,	
+		department_id
+	</sql>
+	<sql id="SelectField">
+		name,	
+		name_en as nameEn,	
+		encoding,	
+		parent_id as parentId,
+		headman,
+		tel,
+		functions,
+		address,
+		remark,	
+		department_id as departmentId
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{name},	
+		#{nameEn},	
+		#{encoding},	
+		#{parentId},
+		#{headman},
+		#{tel},
+		#{functions},
+		#{address},
+		#{remark},	
+		#{departmentId}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="InsertField"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			department_id = #{departmentId}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			name = #{name},
+			name_en = #{nameEn},
+			headman = #{headman},
+			remark = #{remark},
+			tel = #{tel},
+			functions = #{functions},
+			address = #{address},
+			department_id = department_id
+		where 
+		department_id = #{departmentId}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			department_id = #{departmentId}
+	</select>
+	
+	<!-- 通过编码获取数据 -->
+	<select id="findByEncoding" parameterType="pd" resultType="pd">
+		select 
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			encoding = #{encoding}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where
+			1=1
+		<if test="pd.departmentId!= null and pd.departmentId != ''"><!-- 检索 -->
+		and parent_id = #{pd.departmentId}
+		</if>
+		<if test="pd.keywords != null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				 name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				 or 
+				 name_en LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				 or
+				 encoding LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+		order by NAME
+	</select>
+	
+	<!-- 通过ID获取其子级列表 -->
+	<select id="listSubDepartmentByParentId" parameterType="String" resultMap="departmentResultMap">
+		select 
+		<include refid="SelectField"></include>
+		from 
+		<include refid="tableName"></include>
+		where 
+			parent_id = #{parentId} order by name 
+	</select>
+	
+	<!-- wzx149156999 -->
+</mapper>

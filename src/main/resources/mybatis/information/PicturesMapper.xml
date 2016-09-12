@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PicturesMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		tb_pictures
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="InsertField">
+		title,	
+		name,	
+		path,	
+		create_time,	
+		master_id,	
+		remark,	
+		pictures_id
+	</sql>
+	<sql id="SelectField">
+		title,	
+		name,	
+		path,	
+		create_time as createTime,	
+		master_id as masterId,	
+		remark,	
+		pictures_id as picturesId
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{title},	
+		#{name},	
+		#{path},	
+		#{createTime},	
+		#{masterId},	
+		#{remark},	
+		#{picturesId}
+	</sql>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+			a.title,	
+			a.name,	
+			a.path,	
+			a.create_time as createTime,
+			a.master_id as masterId,	
+			a.remark,	
+			a.pictures_id as picturesId
+		from 
+			<include refid="tableName"></include> a
+		where 1 = 1
+		<if test="pd.keywords != null and pd.keywords != ''"><!-- 关键词检索 -->
+			and
+				(
+				 a.title LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				 or 
+				 a.name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+				 or
+				 a.pictures_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				 or
+				 a.master_id LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+				)
+		</if>
+	</select>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into <include refid="tableName"></include>(
+			<include refid="InsertField"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from <include refid="tableName"></include>
+		where 
+			pictures_id = #{picturesId}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				title = #{title},
+				path = #{path},
+				<if test="name != null and name != ''">
+				name = #{name},
+				</if>
+				master_id = #{masterId},
+				remark = #{remark},
+			pictures_id = pictures_id
+			where 
+				pictures_id = #{picturesId}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+			<include refid="SelectField"></include>
+		from 
+			<include refid="tableName"></include>
+		where 
+			pictures_id = #{picturesId}
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from <include refid="tableName"></include>
+		where 
+			pictures_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	
+	<!-- 批量获取 -->
+	<select id="getAllById" parameterType="String" resultType="pd">
+		select path from <include refid="tableName"></include>
+		where 
+			pictures_id in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</select>
+	
+	<!-- 删除图片 -->
+	<update id="delTp" parameterType="pd">
+		update  <include refid="tableName"></include>
+			set 
+				path			= ''
+			where 
+				pictures_id = #{picturesId}
+	</update>
+	
+	<!-- zx QQ149156999(碌碌) -->
+</mapper>
