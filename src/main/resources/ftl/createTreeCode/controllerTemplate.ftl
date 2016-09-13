@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSONArray;
 import javax.annotation.Resource;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -150,7 +150,9 @@ public class ${objectNameFirstUpper}Controller extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			JSONArray arr = JSONArray.fromObject(${objectNameFirstLower}Service.listTree("0"));
+			//JSONArray arr = JSONArray.fromObject(${objectNameFirstLower}Service.listTree("0"));
+			String treeListString = JSONArray.toJSONString(${objectNameFirstLower}Service.listTree("0"));
+			JSONArray arr = JSONArray.parseArray(treeListString);
 			String json = arr.toString();
 			json = json.replaceAll("${objectNameFirstLower}Id", "id").replaceAll("PARENT_ID", "pId").replaceAll("NAME", "name").replaceAll("sub${objectName}", "nodes").replaceAll("has${objectName}", "checked").replaceAll("treeurl", "url");
 			model.addAttribute("zTreeNodes", json);

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
@@ -97,7 +97,7 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public void senFhsms(String user){
 		JSONObject result = new JSONObject();
-		result.element("type", "senFhsms");
+		result.put("type", "senFhsms");
 		OnlineChatServerPool.sendMessageToUser(OnlineChatServerPool.getWebSocketByUser(user),result.toString());	
 	}
 	
@@ -115,8 +115,8 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public void goOut(WebSocket conn,String type){
 		JSONObject result = new JSONObject();
-		result.element("type", type);
-		result.element("msg", "goOut");
+		result.put("type", type);
+		result.put("msg", "goOut");
 		OnlineChatServerPool.sendMessageToUser(conn,result.toString());	
 	}
 	
@@ -134,8 +134,8 @@ public class OnlineChatServer extends WebSocketServer{
 	 */
 	public void getUserCount(WebSocket conn){
 		JSONObject result = new JSONObject();
-		result.element("type", "count");
-		result.element("msg", OnlineChatServerPool.getUserCount());
+		result.put("type", "count");
+		result.put("msg", OnlineChatServerPool.getUserCount());
 		OnlineChatServerPool.sendMessageToUser(conn,result.toString());					
 	}
 	
@@ -147,8 +147,8 @@ public class OnlineChatServer extends WebSocketServer{
 		WebSocket conn =  OnlineChatServerPool.getFhadmin();
 		if(null == conn){return;}
 		JSONObject result = new JSONObject();
-		result.element("type", "userlist");
-		result.element("list", OnlineChatServerPool.getOnlineUser());
+		result.put("type", "userlist");
+		result.put("list", OnlineChatServerPool.getOnlineUser());
 		OnlineChatServerPool.sendMessageToUser(conn,result.toString());					
 	}
 	
@@ -179,8 +179,8 @@ public class OnlineChatServer extends WebSocketServer{
 		WebSocket conn =  OnlineChatServerPool.getFhadmin();
 		if(null == conn){return;}
 		JSONObject result = new JSONObject();
-		result.element("type", "addUser");
-		result.element("user", user);
+		result.put("type", "addUser");
+		result.put("user", user);
 		OnlineChatServerPool.sendMessageToUser(conn,result.toString());	
 	}
 	

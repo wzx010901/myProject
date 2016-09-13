@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
@@ -88,15 +88,15 @@ public class ChatServer extends WebSocketServer{
 	 */
 	public void userjoin(String user, WebSocket conn){
 		JSONObject result = new JSONObject();
-		result.element("type", "user_join");
-		result.element("user", "<a onclick=\"toUserMsg('"+user+"');\">"+user+"</a>");
+		result.put("type", "user_join");
+		result.put("user", "<a onclick=\"toUserMsg('"+user+"');\">"+user+"</a>");
 		ChatServerPool.sendMessage(result.toString());				//把当前用户加入到所有在线用户列表中
 		String joinMsg = "{\"from\":\"[系统]\",\"content\":\""+user+"上线了\",\"timestamp\":"+new Date().getTime()+",\"type\":\"message\"}";
 		ChatServerPool.sendMessage(joinMsg);						//向所有在线用户推送当前用户上线的消息
 		result = new JSONObject();
-		result.element("type", "get_online_user");
+		result.put("type", "get_online_user");
 		ChatServerPool.addUser(user,conn);							//向连接池添加当前的连接对象
-		result.element("list", ChatServerPool.getOnlineUser());
+		result.put("list", ChatServerPool.getOnlineUser());
 		ChatServerPool.sendMessageToUser(conn, result.toString());	//向当前连接发送当前在线用户的列表
 	}
 	
@@ -109,8 +109,8 @@ public class ChatServer extends WebSocketServer{
 		boolean b = ChatServerPool.removeUser(conn);				//在连接池中移除连接
 		if(b){
 			JSONObject result = new JSONObject();
-			result.element("type", "user_leave");
-			result.element("user", "<a onclick=\"toUserMsg('"+user+"');\">"+user+"</a>");
+			result.put("type", "user_leave");
+			result.put("user", "<a onclick=\"toUserMsg('"+user+"');\">"+user+"</a>");
 			ChatServerPool.sendMessage(result.toString());			//把当前用户从所有在线用户列表中删除
 			String joinMsg = "{\"from\":\"[系统]\",\"content\":\""+user+"下线了\",\"timestamp\":"+new Date().getTime()+",\"type\":\"message\"}";
 			ChatServerPool.sendMessage(joinMsg);					//向在线用户发送当前用户退出的消息

@@ -23,7 +23,7 @@ import javax.net.ssl.TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONObject;
 
 import org.marker.weixin.DefaultSession;
 import org.marker.weixin.HandleMessageAdapter;
@@ -462,7 +462,9 @@ public class WeixinController extends BaseController {
 			inputStream.close();
 			inputStream = null;
 			httpUrlConn.disconnect();
-			jsonobject = JSONObject.fromObject(buffer.toString());
+//			jsonobject = JSONObject.fromObject(buffer.toString());
+
+			jsonobject = JSONObject.parseObject(buffer.toString());
 		} catch (ConnectException ce) {
 
 		} catch (Exception e) {

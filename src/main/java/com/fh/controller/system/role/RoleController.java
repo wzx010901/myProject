@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
+import com.alibaba.fastjson.JSONArray;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -225,7 +225,9 @@ public class RoleController extends BaseController {
 			String roleRights = role.getRights();					//取出本角色菜单权限
 			List<Menu> menuList = menuService.listAllMenuJurisdiction("0");	//获取所有菜单
 			menuList = this.readMenu(menuList, roleRights);			//根据角色权限处理菜单权限状态(递归处理)
-			JSONArray arr = JSONArray.fromObject(menuList);
+//			JSONArray arr = JSONArray.fromObject(menuList);
+			String menuListString = JSONArray.toJSONString(menuList);
+			JSONArray arr = JSONArray.parseArray(menuListString);
 			String json = arr.toString();
 			json = json.replaceAll("menuId", "id").replaceAll("parentId", "pId").replaceAll("menuName", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
 			model.addAttribute("zTreeNodes", json);
@@ -295,7 +297,9 @@ public class RoleController extends BaseController {
 				roleRights = role.getFindJurisdiction();	//查看权限
 			}
 			menuList = this.readMenu(menuList, roleRights);		//根据角色权限处理菜单权限状态(递归处理)
-			JSONArray arr = JSONArray.fromObject(menuList);
+//			JSONArray arr = JSONArray.fromObject(menuList);
+			String menuListString = JSONArray.toJSONString(menuList);
+			JSONArray arr = JSONArray.parseArray(menuListString);
 			String json = arr.toString();
 			json = json.replaceAll("menuId", "id").replaceAll("parentId", "pId").replaceAll("menuName", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked");
 			model.addAttribute("zTreeNodes", json);

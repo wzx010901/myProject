@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -140,7 +140,9 @@ public class DepartmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			JSONArray arr = JSONArray.fromObject(departmentService.listAllDepartment("0"));
+			
+			String allDepartmentListString = JSONArray.toJSONString(departmentService.listAllDepartment("0"));
+			JSONArray arr = JSONArray.parseArray(allDepartmentListString);
 			String json = arr.toString();
 			json = json.replaceAll("departmentId", "id").replaceAll("parentId", "pId").replaceAll("name", "name").replaceAll("subDepartment", "nodes").replaceAll("hasDepartment", "checked").replaceAll("treeUrl", "url");
 			model.addAttribute("zTreeNodes", json);

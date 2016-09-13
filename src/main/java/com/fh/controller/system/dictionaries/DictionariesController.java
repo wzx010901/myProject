@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
-
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.Page;
 import com.fh.util.AppUtil;
@@ -158,7 +157,9 @@ public class DictionariesController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		try{
-			JSONArray arr = JSONArray.fromObject(dictionariesService.listAllDict("0"));
+//			JSONArray arr = JSONArray.fromObject(dictionariesService.listAllDict("0"));
+			String allDictListString = JSONArray.toJSONString(dictionariesService.listAllDict("0"));
+			JSONArray arr = JSONArray.parseArray(allDictListString);
 			String json = arr.toString();
 			json = json.replaceAll("dictionariesId", "id").replaceAll("parentId", "pId").replaceAll("name", "name").replaceAll("subDict", "nodes").replaceAll("hasDict", "checked").replaceAll("treeUrl", "url");
 			model.addAttribute("zTreeNodes", json);

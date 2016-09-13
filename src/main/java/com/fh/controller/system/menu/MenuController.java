@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONArray;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.fh.controller.base.BaseController;
 import com.fh.entity.system.Menu;
 import com.fh.service.system.menu.MenuManager;
@@ -234,7 +233,9 @@ public class MenuController extends BaseController {
 	public ModelAndView listAllMenu(Model model,String menuId)throws Exception{
 		ModelAndView mv = this.getModelAndView();
 		try{
-			JSONArray arr = JSONArray.fromObject(menuService.listAllMenu("0"));
+//			JSONArray arr = JSONArray.fromObject(menuService.listAllMenu("0"));
+			String allMenuListString = JSONArray.toJSONString(menuService.listAllMenu("0"));
+			JSONArray arr = JSONArray.parseArray(allMenuListString);
 			String json = arr.toString();
 			json = json.replaceAll("menuId", "id").replaceAll("parentId", "pId").replaceAll("menuName", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("menuUrl", "url");
 			model.addAttribute("zTreeNodes", json);
@@ -264,7 +265,9 @@ public class MenuController extends BaseController {
 			String roleRights = Jurisdiction.getSession().getAttribute(Jurisdiction.getUsername() + Const.SESSION_ROLE_RIGHTS).toString();	//获取本角色菜单权限
 			List<Menu> athmenuList = menuService.listAllMenuJurisdiction(menuId);					//获取某菜单下所有子菜单
 			athmenuList = this.readMenu(athmenuList, roleRights);							//根据权限分配菜单
-			JSONArray arr = JSONArray.fromObject(athmenuList);
+//			JSONArray arr = JSONArray.fromObject(athmenuList);
+			String athmenuListString = JSONArray.toJSONString(athmenuList);
+			JSONArray arr = JSONArray.parseArray(athmenuListString);
 			String json = arr.toString();
 			json = json.replaceAll("menuId", "id").replaceAll("parentId", "pId").replaceAll("menuName", "name").replaceAll("subMenu", "nodes").replaceAll("hasMenu", "checked").replaceAll("menuUrl", "url").replaceAll("#", "");
 			model.addAttribute("zTreeNodes", json);
