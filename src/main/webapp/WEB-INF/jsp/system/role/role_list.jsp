@@ -273,7 +273,7 @@
 			 var diag = new top.Dialog();
 			 diag.Drag = true;
 			 diag.Title = "菜单权限";
-			 diag.URL = '<%=basePath%>role/menuqx.do?roleId='+roleId;
+			 diag.URL = '<%=basePath%>role/menuJurisdiction.do?roleId='+roleId;
 			 diag.Width = 320;
 			 diag.Height = 450;
 			 diag.CancelEvent = function(){ //关闭事件
