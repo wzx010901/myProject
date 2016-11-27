@@ -110,7 +110,7 @@ public class AppUtil  {
 	 * @param map
 	 * @return
 	 */
-	public static Object returnObject(PageData pd, Map map){
+	public static Object returnObject(PageData pd, Map<String,?> map){
 		if(pd.containsKey("callback")){
 			String callback = pd.get("callback").toString();
 			return new JSONPObject(callback, map);

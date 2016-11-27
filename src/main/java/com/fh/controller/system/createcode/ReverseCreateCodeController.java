@@ -1,8 +1,6 @@
 package com.fh.controller.system.createcode;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +16,6 @@ import com.fh.util.AppUtil;
 import com.fh.util.DbFH;
 import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
-import com.fh.util.StringUtil;
 
 /** 
  * 类名称： 反向生成

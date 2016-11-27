@@ -12,37 +12,40 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-/**	文件处理
-*  创建人：WZX Q149156999
- * 创建时间：2014年12月23日
+/**
+ * 文件处理 创建人：WZX Q149156999 创建时间：2014年12月23日
  */
 public class FileUtil {
 
-	
-	/**获取文件大小 返回 KB 保留3位小数  没有文件时返回0
-	 * @param filepath 文件完整路径，包括文件名
+	/**
+	 * 获取文件大小 返回 KB 保留3位小数 没有文件时返回0
+	 * 
+	 * @param filepath
+	 *            文件完整路径，包括文件名
 	 * @return
 	 */
-	public static Double getFilesize(String filepath){
+	public static Double getFilesize(String filepath) {
 		File backupath = new File(filepath);
-		return Double.valueOf(backupath.length())/1000.000;
+		return Double.valueOf(backupath.length()) / 1000.000;
 	}
-	
+
 	/**
 	 * 创建目录
+	 * 
 	 * @param destDirName目标目录名
-	 * @return 
+	 * @return
 	 */
 	public static Boolean createDir(String destDirName) {
 		File dir = new File(destDirName);
-		if(!dir.getParentFile().exists()){				//判断有没有父路径，就是判断文件整个路径是否存在
-			return dir.getParentFile().mkdirs();		//不存在就全部创建
+		if (!dir.getParentFile().exists()) { // 判断有没有父路径，就是判断文件整个路径是否存在
+			return dir.getParentFile().mkdirs(); // 不存在就全部创建
 		}
 		return false;
 	}
 
 	/**
 	 * 删除文件
+	 * 
 	 * @param filePathAndName
 	 *            String 文件路径及名称 如c:/fqf.txt
 	 * @param fileContent
@@ -63,7 +66,9 @@ public class FileUtil {
 
 	/**
 	 * 读取到字节数组0
-	 * @param filePath //路径
+	 * 
+	 * @param filePath
+	 *            //路径
 	 * @throws IOException
 	 */
 	public static byte[] getContent(String filePath) throws IOException {
@@ -77,16 +82,24 @@ public class FileUtil {
 		byte[] buffer = new byte[(int) fileSize];
 		int offset = 0;
 		int numRead = 0;
-		while (offset < buffer.length
-				&& (numRead = fi.read(buffer, offset, buffer.length - offset)) >= 0) {
+		while (offset < buffer.length && (numRead = fi.read(buffer, offset, buffer.length - offset)) >= 0) {
 			offset += numRead;
 		}
 		// 确保所有数据均被读取
 		if (offset != buffer.length) {
-			throw new IOException("Could not completely read file " + file.getName());
+			extracted(file.getName());
 		}
 		fi.close();
 		return buffer;
+	}
+
+	/**
+	 * 异常处理
+	 * @param name
+	 * @throws IOException
+	 */
+	private static void extracted(String name) throws IOException {
+		throw new IOException("Could not completely read file " + name);
 	}
 
 	/**
@@ -180,9 +193,8 @@ public class FileUtil {
 		try {
 			rf = new RandomAccessFile(filePath, "r");
 			fc = rf.getChannel();
-			MappedByteBuffer byteBuffer = fc.map(MapMode.READ_ONLY, 0,
-					fc.size()).load();
-			//System.out.println(byteBuffer.isLoaded());
+			MappedByteBuffer byteBuffer = fc.map(MapMode.READ_ONLY, 0, fc.size()).load();
+			// System.out.println(byteBuffer.isLoaded());
 			byte[] result = new byte[(int) fc.size()];
 			if (byteBuffer.remaining() > 0) {
 				// System.out.println("remain");

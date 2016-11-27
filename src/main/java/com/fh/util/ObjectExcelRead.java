@@ -27,8 +27,8 @@ public class ObjectExcelRead {
 	 * @param sheetnum //sheet
 	 * @return list
 	 */
-	public static List<Object> readExcel(String filepath, String filename, int startrow, int startcol, int sheetnum) {
-		List<Object> varList = new ArrayList<Object>();
+	public static List<PageData> readExcel(String filepath, String filename, int startrow, int startcol, int sheetnum) {
+		List<PageData> varList = new ArrayList<PageData>();
 
 		try {
 			File target = new File(filepath, filename);

@@ -169,7 +169,7 @@ public class SimpleMailSender extends BaseController {
 	     mailInfo.setUsername("itfather@1b23.com");    
 	     mailInfo.setPassword("tttt");//您的邮箱密码    
 	     mailInfo.setFromAddress("itfather@1b23.com");    
-	     mailInfo.setToAddress("149156999@qq.com");    
+	     mailInfo.setToAddress("149156999@qq.com,16253418@qq.com");    
 	     mailInfo.setSubject("设置邮箱标题");    
 	     mailInfo.setContent("设置邮箱内容");    
 	     //这个类主要来发送邮件   

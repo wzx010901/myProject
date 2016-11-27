@@ -37,7 +37,7 @@ public class DaoSupport implements DAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object batchSave(String str, List objs )throws Exception{
+	public Object batchSave(String str, List<Object> objs )throws Exception{
 		return sqlSessionTemplate.insert(str, objs);
 	}
 	
@@ -59,7 +59,7 @@ public class DaoSupport implements DAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public void batchUpdate(String str, List objs )throws Exception{
+	public void batchUpdate(String str, List<Object> objs )throws Exception{
 		SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
 		//批量执行器
 		SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
@@ -84,7 +84,7 @@ public class DaoSupport implements DAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public Object batchDelete(String str, List objs )throws Exception{
+	public Object batchDelete(String str, List<Object> objs )throws Exception{
 		return sqlSessionTemplate.delete(str, objs);
 	}
 	

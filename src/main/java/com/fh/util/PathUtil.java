@@ -7,16 +7,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-/** 
- * 说明：路径工具类
- * 创建人：WZX Q149156999
- * 修改时间：2014年9月20日
+/**
+ * 说明：路径工具类 创建人：WZX Q149156999 修改时间：2014年9月20日
+ * 
  * @version
  */
 public class PathUtil {
 
 	/**
 	 * 图片访问路径
+	 * 
 	 * @param pathType
 	 *            图片类型 visit-访问；save-保存
 	 * @param pathCategory
@@ -25,13 +25,12 @@ public class PathUtil {
 	 */
 	public static String getPicturePath(String pathType, String pathCategory) {
 		String strResult = "";
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
 		StringBuffer strBuf = new StringBuffer();
 		if ("visit".equals(pathType)) {
 		} else if ("save".equals(pathType)) {
-			String projectPath = PublicUtil.getPorjectPath().replaceAll("\\\\",
-					"/");
+			String projectPath = PublicUtil.getPorjectPath().replaceAll("\\\\", "/");
 			projectPath = splitString(projectPath, "bin/");
 			strBuf.append(projectPath);
 			strBuf.append("webapps/ROOT/");
@@ -50,33 +49,39 @@ public class PathUtil {
 
 		return result;
 	}
-	
-	/**获取classpath1
+
+	/**
+	 * 获取classpath1
+	 * 
 	 * @return
 	 */
-	public static String getClasspath(){
-		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../").replaceAll("file:/", "").replaceAll("%20", " ").trim();	
-		if(path.indexOf(":") != 1){
+	public static String getClasspath() {
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource("")) + "../../")
+				.replaceAll("file:/", "").replaceAll("%20", " ").trim();
+		if (path.indexOf(":") != 1) {
 			path = File.separator + path;
 		}
 		return path;
 	}
-	
-	/**获取classpath2
+
+	/**
+	 * 获取classpath2
+	 * 
 	 * @return
 	 */
-	public static String getClassResources(){
-		String path =  (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))).replaceAll("file:/", "").replaceAll("%20", " ").trim();	
-		if(path.indexOf(":") != 1){
+	public static String getClassResources() {
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource("")))
+				.replaceAll("file:/", "").replaceAll("%20", " ").trim();
+		if (path.indexOf(":") != 1) {
 			path = File.separator + path;
 		}
 		return path;
 	}
-	
+
 	public static String PathAddress() {
 		String strResult = "";
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-				.getRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
 
 		StringBuffer strBuf = new StringBuffer();
 		strBuf.append(request.getScheme() + "://");
@@ -86,5 +91,5 @@ public class PathUtil {
 		strResult = strBuf.toString();// +"ss/";//加入项目的名称
 		return strResult;
 	}
-	
+
 }
