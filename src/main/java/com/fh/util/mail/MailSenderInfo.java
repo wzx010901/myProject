@@ -10,17 +10,17 @@ import java.util.Properties;
  */
 public class MailSenderInfo {
 	// 发送邮件的服务器的IP和端口
-	private String mailServerHost;
+	private String mailServerHost = "smtp.exmail.qq.com";
 	private String mailServerPort = "25";
 	// 邮件发送者的地址
 	private String fromAddress;
 	// 邮件接收者的地址
-	private String toAddress;
+	private String[] toAddress;
 	// 登陆邮件发送服务器的用户名和密码
-	private String username;
-	private String password;
+	private String username = "service@jizhenfang.com";
+	private String password = "QL1o10eh9L1o10xApe";
 	// 是否需要身份验证
-	private boolean validate = false;
+	private boolean validate = true;
 	// 邮件主题
 	private String subject;
 	// 邮件的文本内容
@@ -87,11 +87,11 @@ public class MailSenderInfo {
 		this.password = password;
 	}
 
-	public String getToAddress() {
+	public String[] getToAddress() {
 		return toAddress;
 	}
 
-	public void setToAddress(String toAddress) {
+	public void setToAddress(String[] toAddress) {
 		this.toAddress = toAddress;
 	}
 
