@@ -1,6 +1,5 @@
 package com.fh.util;
 
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -10,9 +9,7 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
-
-
-import Decoder.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,8 +40,8 @@ public class Uploader {
 	// 保存路径
 	private String savePath = "upload";
 	// 文件允许格式
-	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf",
-			".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png",
+			".jpg", ".jpeg", ".bmp" };
 	// 文件大小限制，单位Byte
 	private long maxSize = 0;
 
@@ -53,8 +50,7 @@ public class Uploader {
 	// 上传的文件数据
 	private InputStream inputStream = null;
 
-	public static final String ENCODEING = System.getProperties().getProperty(
-			"file.encoding");
+	public static final String ENCODEING = System.getProperties().getProperty("file.encoding");
 
 	public Uploader(HttpServletRequest request) {
 		this.request = request;
@@ -65,14 +61,11 @@ public class Uploader {
 		HashMap<String, String> tmp = this.errorInfo;
 		tmp.put("SUCCESS", "SUCCESS"); // 默认成功
 		// 未包含文件上传域
-		tmp.put("noFile",
-				"\\u672a\\u5305\\u542b\\u6587\\u4ef6\\u4e0a\\u4f20\\u57df");
+		tmp.put("noFile", "\\u672a\\u5305\\u542b\\u6587\\u4ef6\\u4e0a\\u4f20\\u57df");
 		// 不允许的文件格式
-		tmp.put("type",
-				"\\u4e0d\\u5141\\u8bb8\\u7684\\u6587\\u4ef6\\u683c\\u5f0f");
+		tmp.put("type", "\\u4e0d\\u5141\\u8bb8\\u7684\\u6587\\u4ef6\\u683c\\u5f0f");
 		// 文件大小超出限制
-		tmp.put("size",
-				"\\u6587\\u4ef6\\u5927\\u5c0f\\u8d85\\u51fa\\u9650\\u5236");
+		tmp.put("size", "\\u6587\\u4ef6\\u5927\\u5c0f\\u8d85\\u51fa\\u9650\\u5236");
 		// 请求类型错误
 		tmp.put("enType", "\\u8bf7\\u6c42\\u7c7b\\u578b\\u9519\\u8bef");
 		// 上传请求异常
@@ -91,8 +84,7 @@ public class Uploader {
 	}
 
 	public void upload() throws Exception {
-		boolean isMultipart = ServletFileUpload
-				.isMultipartContent(this.request);
+		boolean isMultipart = ServletFileUpload.isMultipartContent(this.request);
 		if (!isMultipart) {
 			this.state = this.errorInfo.get("noFile");
 			return;
@@ -118,8 +110,7 @@ public class Uploader {
 			this.type = this.getFileExt(this.fileName);
 			this.url = savePath + "/" + this.fileName;
 
-			FileOutputStream fos = new FileOutputStream(
-					this.getPhysicalPath(this.url));
+			FileOutputStream fos = new FileOutputStream(this.getPhysicalPath(this.url));
 			BufferedInputStream bis = new BufferedInputStream(this.inputStream);
 			byte[] buff = new byte[128];
 			int count = -1;
@@ -151,11 +142,13 @@ public class Uploader {
 		String base64Data = this.request.getParameter(fieldName);
 		this.fileName = this.getName("test.png");
 		this.url = savePath + "/" + this.fileName;
-		BASE64Decoder decoder = new BASE64Decoder();
+		// BASE64Decoder decoder = new BASE64Decoder();
+		Base64 decoder = new Base64();
 		try {
 			File outFile = new File(this.getPhysicalPath(this.url));
 			OutputStream ro = new FileOutputStream(outFile);
-			byte[] b = decoder.decodeBuffer(base64Data);
+			// byte[] b = decoder.decodeBuffer(base64Data);
+			byte[] b = decoder.decode(base64Data);
 			for (int i = 0; i < b.length; ++i) {
 				if (b[i] < 0) {
 					b[i] += 256;
@@ -217,8 +210,7 @@ public class Uploader {
 				// 普通参数存储
 				if (item.isFormField()) {
 
-					this.params.put(item.getFieldName(),
-							this.getParameterValue(item.openStream()));
+					this.params.put(item.getFieldName(), this.getParameterValue(item.openStream()));
 
 				} else {
 
@@ -246,8 +238,7 @@ public class Uploader {
 	 */
 	private String getName(String fileName) {
 		Random random = new Random();
-		return this.fileName = "" + random.nextInt(10000)
-				+ System.currentTimeMillis() + this.getFileExt(fileName);
+		return this.fileName = "" + random.nextInt(10000) + System.currentTimeMillis() + this.getFileExt(fileName);
 	}
 
 	/**
@@ -279,8 +270,7 @@ public class Uploader {
 	 */
 	private String getPhysicalPath(String path) {
 		String servletPath = this.request.getServletPath();
-		String realPath = this.request.getSession().getServletContext()
-				.getRealPath(servletPath);
+		String realPath = this.request.getSession().getServletContext().getRealPath(servletPath);
 		return new File(realPath).getParent() + "/" + path;
 	}
 
@@ -312,6 +302,7 @@ public class Uploader {
 
 	}
 
+	@SuppressWarnings("unused")
 	private byte[] getFileOutputStream(InputStream in) {
 
 		try {

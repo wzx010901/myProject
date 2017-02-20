@@ -32,6 +32,7 @@ public class SortUtil {
 	 * @param orderType
 	 *            排序类型：正序-asc；倒序-desc
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List sort(List sortList, String param1, String orderType) {
 		Comparator mycmp1 = ComparableComparator.getInstance();
 		if ("desc".equals(orderType)) {
@@ -59,6 +60,7 @@ public class SortUtil {
 	 * @param orderType
 	 *            排序类型：正序-asc；倒序-desc
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List sortParam2(List sortList, String param1, String param2, String orderType) {
 		Comparator mycmp1 = ComparableComparator.getInstance();
 		Comparator mycmp2 = ComparableComparator.getInstance();
@@ -76,22 +78,23 @@ public class SortUtil {
 		return sortList;
 	}
 
-	public static List testMapSort() {
-		List sortList = new ArrayList();
+	@SuppressWarnings("unchecked")
+	public static List<Map<String,Object>> testMapSort() {
+//		List<Map<String,Object>> sortList = new ArrayList<Map<String,Object>>();
 
-		Map map = new HashMap();
+		Map<String,Object> map = new HashMap<String,Object>();
 		map.put("name", "1");
 		map.put("age", "1");
 
-		Map map2 = new HashMap();
+		Map<String,Object> map2 = new HashMap<String,Object>();
 		map2.put("name", "2");
 		map2.put("age", "13");
 
-		Map map1 = new HashMap();
+		Map<String,Object> map1 = new HashMap<String,Object>();
 		map1.put("name", "2");
 		map1.put("age", "12");
 
-		List list = new ArrayList();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		list.add(map);
 		list.add(map1);
 		list.add(map2);

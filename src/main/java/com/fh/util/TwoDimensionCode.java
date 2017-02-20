@@ -242,6 +242,7 @@ public class TwoDimensionCode {
 		return content;
 	}
 
+	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
 		String imgPath = "F:/a.png";
 		/*String encoderContent = "Hello 大大、小小,welcome to QRCode!"

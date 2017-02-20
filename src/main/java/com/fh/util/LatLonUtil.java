@@ -8,7 +8,7 @@ package com.fh.util;
  */
 public class LatLonUtil {
 
-	private static final double PI = 3.14159265; // 圆周率
+	private static final double PI = 3.14159265; // 圆周率 //3.14159265358979323846
 //	private static final double EARTH_RADIUS = 6378137; // 地球半径
 //	private static final double RAD = Math.PI / 180.0; // 一百八十度角
 

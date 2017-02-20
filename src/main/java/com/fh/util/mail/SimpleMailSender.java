@@ -31,7 +31,7 @@ public class SimpleMailSender extends BaseController {
       Properties pro = mailInfo.getProperties();   
       if (mailInfo.isValidate()) {    
       // 如果需要身份认证，则创建一个密码验证器    
-        authenticator = new MyAuthenticator(mailInfo.getUsername(), mailInfo.getPassword());    
+      	authenticator = new MyAuthenticator(mailInfo.getUsername(), mailInfo.getPassword());    
       }   
       // 根据邮件会话属性和密码验证器构造一个发送邮件的session    
       Session sendMailSession = Session.getDefaultInstance(pro,authenticator); 
@@ -160,7 +160,7 @@ public class SimpleMailSender extends BaseController {
 	     
 	   }
     
-    public static void main(String[] args){   
+    public static void main(String[] args) throws Exception{   
         //这个类主要是设置邮件   
 	     MailSenderInfo mailInfo = new MailSenderInfo();    
 	     mailInfo.setMailServerHost("smtp.qq.com");    
@@ -169,12 +169,12 @@ public class SimpleMailSender extends BaseController {
 	     mailInfo.setUsername("itfather@1b23.com");    
 	     mailInfo.setPassword("tttt");//您的邮箱密码    
 	     mailInfo.setFromAddress("itfather@1b23.com");    
-	     mailInfo.setToAddress("149156999@qq.com,16253418@qq.com");    
+	     mailInfo.setToAddress("149156999@qq.com");    
 	     mailInfo.setSubject("设置邮箱标题");    
 	     mailInfo.setContent("设置邮箱内容");    
 	     //这个类主要来发送邮件   
-	     //SimpleMailSender sms = new SimpleMailSender();   
-	     //sms.sendTextMail(mailInfo);//发送文体格式    
+	     SimpleMailSender sms = new SimpleMailSender();   
+	     sms.sendTextMail(mailInfo);//发送文体格式    
 	     //sms.sendHtmlMail(mailInfo);//发送html格式   
 	   }
     

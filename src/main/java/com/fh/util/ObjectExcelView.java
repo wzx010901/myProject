@@ -12,6 +12,8 @@ import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.springframework.web.servlet.view.document.AbstractExcelView;
 /**
 * 导入到EXCEL
@@ -19,8 +21,10 @@ import org.springframework.web.servlet.view.document.AbstractExcelView;
 * @author WZX Q149156999
 * @version 1.0
  */
+@SuppressWarnings("deprecation")
 public class ObjectExcelView extends AbstractExcelView{
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model,
 			HSSFWorkbook workbook, HttpServletRequest request,
@@ -37,10 +41,14 @@ public class ObjectExcelView extends AbstractExcelView{
 		List<String> titles = (List<String>) model.get("titles");
 		int len = titles.size();
 		HSSFCellStyle headerStyle = workbook.createCellStyle(); //标题样式
-		headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+//		headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		
+//		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		HSSFFont headerFont = workbook.createFont();	//标题字体
-		headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+//		headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		headerFont.setBold(true);
 		headerFont.setFontHeightInPoints((short)11);
 		headerStyle.setFont(headerFont);
 		short width = 20,height=25*20;
@@ -54,7 +62,8 @@ public class ObjectExcelView extends AbstractExcelView{
 		sheet.getRow(0).setHeight(height);
 		
 		HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
-		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+//		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		contentStyle.setAlignment(HorizontalAlignment.CENTER);
 		List<PageData> varList = (List<PageData>) model.get("varList");
 		int varCount = varList.size();
 		for(int i=0; i<varCount; i++){
@@ -65,9 +74,6 @@ public class ObjectExcelView extends AbstractExcelView{
 				cell.setCellStyle(contentStyle);
 				setText(cell,varstr);
 			}
-			
 		}
-		
 	}
-
 }

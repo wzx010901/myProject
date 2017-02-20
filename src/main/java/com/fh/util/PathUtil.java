@@ -25,8 +25,8 @@ public class PathUtil {
 	 */
 	public static String getPicturePath(String pathType, String pathCategory) {
 		String strResult = "";
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-				.getRequest();
+//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+//				.getRequest();
 		StringBuffer strBuf = new StringBuffer();
 		if ("visit".equals(pathType)) {
 		} else if ("save".equals(pathType)) {

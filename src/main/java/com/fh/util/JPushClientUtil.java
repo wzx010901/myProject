@@ -72,7 +72,6 @@ public class JPushClientUtil extends BaseController{
 		if (null != msgResult) {
 			result = "服务器返回数据: " + msgResult.toString();
 			System.out.println(result);
-			
 			if (msgResult.getErrcode() == ErrorCodeEnum.NOERROR.value()) {
 				result = String.format(
 					"发送成功， sendNo= %s,messageId= %s",
