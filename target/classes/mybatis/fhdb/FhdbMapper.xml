@@ -11,9 +11,9 @@
 	<sql id="SelectField">
 		username,	
 		backup_time as backupTime,	
-		tablename,	
+		table_name as tablename,	
 		sqlpath,	
-		type,	
+		type
 		dbsize,	
 		remark,	
 		fhdb_id as fhdbId
@@ -21,7 +21,7 @@
 	<sql id="InsertField">
 		username,	
 		backup_time,	
-		tablename,	
+		table_name,	
 		sqlpath,	
 		type,	
 		dbsize,	
@@ -92,7 +92,7 @@
 				(
 					username LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
-					tablename LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
+					table_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 				)
 		</if>
 		<if test="pd.type != null and pd.type != ''"><!-- 类型 -->
