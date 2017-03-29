@@ -53,7 +53,7 @@ public class ButtonrightsController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		if(pd.getString("roleId") == null || "".equals(pd.getString("roleId").trim())){
-			pd.put("roleId", "1");										//默认列出第一组角色(初始设计系统用户和会员组不能删除)
+			pd.put("roleId", "1");											//默认列出第一组角色(初始设计系统用户和会员组不能删除)
 		}
 		PageData fpd = new PageData();
 		fpd.put("roleId", "0");

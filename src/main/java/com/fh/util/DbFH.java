@@ -564,7 +564,7 @@ public class DbFH{
 	 * @throws IOException
 	 */
 	public static Properties getPprVue() {
-		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("dbfh.properties");
+		InputStream inputStream = DbFH.class.getClassLoader().getResourceAsStream("backupdb.properties");
 		Properties p = new Properties();
 		try {
 			p.load(inputStream);

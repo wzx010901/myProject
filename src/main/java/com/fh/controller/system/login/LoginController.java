@@ -21,16 +21,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fh.controller.base.BaseController;
+import com.fh.entity.system.Menu;
+import com.fh.entity.system.Role;
+import com.fh.entity.system.User;
 import com.fh.service.system.appuser.AppuserManager;
 import com.fh.service.system.buttonrights.ButtonrightsManager;
 import com.fh.service.system.fhbutton.FhbuttonManager;
 import com.fh.service.system.menu.MenuManager;
-import com.fh.entity.system.Menu;
-import com.fh.entity.system.Role;
-import com.fh.entity.system.User;
 import com.fh.service.system.role.RoleManager;
 import com.fh.service.system.user.UserManager;
 import com.fh.util.AppUtil;
+import com.fh.util.ConfigUtil;
 import com.fh.util.Const;
 import com.fh.util.DateUtil;
 import com.fh.util.Jurisdiction;
@@ -67,7 +68,8 @@ public class LoginController extends BaseController {
 		ModelAndView mv = this.getModelAndView();
 		PageData pd = new PageData();
 		pd = this.getPageData();
-		pd.put("sysName", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
+		PageData sysNamepageData = ConfigUtil.readSysName();
+		pd.put("sysName", sysNamepageData.getString("sysName")); //读取系统名称
 		mv.setViewName("system/index/login");
 		mv.addObject("pd",pd);
 		return mv;
@@ -84,16 +86,15 @@ public class LoginController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String errInfo = "";
-		String keyData[] = pd.getString("keyData").replaceAll("qq149156999fh", "").replaceAll("QQ978336446fh", "").split(",fh,");
-		if(null != keyData && keyData.length == 3){
+		if(pd.get("code") != null && pd.get("username") != null && pd.get("password") != null){
 			Session session = Jurisdiction.getSession();
 			String sessionCode = (String)session.getAttribute(Const.SESSION_SECURITY_CODE);		//获取session中的验证码
-			String code = keyData[2];
+			String code = pd.getString("code");
 			if(null == code || "".equals(code)){//判断效验码
 				errInfo = "nullcode"; 			//效验码为空
 			}else{
-				String username = keyData[0];	//登录过来的用户名
-				String password  = keyData[1];	//登录过来的密码
+				String username =  pd.getString("username");	//登录过来的用户名
+				String password  =  pd.getString("password");	//登录过来的密码
 				pd.put("username", username);
 				if(Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(code)){		//判断登录验证码
 					String passwd = new SimpleHash("SHA-1", username, password).toString();	//密码加密
@@ -221,7 +222,9 @@ public class LoginController extends BaseController {
 			mv.setViewName("system/index/login");
 			logger.error(e.getMessage(), e);
 		}
-		pd.put("sysName", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
+		PageData sysNamepageData = ConfigUtil.readSysName();
+		pd.put("sysName", sysNamepageData.get("sysName")); //读取系统名称
+//		pd.put("sysName", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
 		mv.addObject("pd",pd);
 		return mv;
 	}
@@ -292,7 +295,9 @@ public class LoginController extends BaseController {
 		subject.logout();
 		pd = this.getPageData();
 		pd.put("msg", pd.getString("msg"));
-		pd.put("sysName", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
+		PageData sysNamepageData = ConfigUtil.readSysName();
+		pd.put("sysName", sysNamepageData.get("sysName")); //读取系统名称
+//		pd.put("sysName", Tools.readTxtFile(Const.SYSNAME)); //读取系统名称
 		mv.setViewName("system/index/login");
 		mv.addObject("pd",pd);
 		return mv;

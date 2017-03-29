@@ -135,14 +135,13 @@
 		//服务器校验
 		function severCheck(){
 			if(check()){
-				
 				var loginname = $("#loginname").val();
 				var password = $("#password").val();
-				var code = "qq149156999fh"+loginname+",fh,"+password+"QQ978336446fh"+",fh,"+$("#code").val();
+				var codePut = $("#code").val();
 				$.ajax({
 					type: "POST",
 					url: 'login_login',
-			    	data: {keyData:code,tm:new Date().getTime()},
+			    	data: {tm:new Date().getTime(),"username":loginname,"password":password,"code":codePut},
 					dataType:'json',
 					cache: false,
 					success: function(data){

@@ -2,6 +2,7 @@ package com.fh.controller.fhdb.timingbackup;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -33,7 +34,7 @@ public class DbBackupQuartzJob extends BaseController implements Job {
 		JobDataMap dataMap = context.getJobDetail().getJobDataMap();
 		Map<String, Object> parameter = (Map<String, Object>) dataMap.get("parameterList"); // 获取参数
 		String tableName = parameter.get("tableName").toString();
-		tableName = tableName.equals("all") ? "" : tableName;
+		tableName = Objects.equals("all", tableName) ? "" : tableName;
 
 		// 普通类从spring容器中拿出service
 		WebApplicationContext webctx = ContextLoader.getCurrentWebApplicationContext();
@@ -41,14 +42,14 @@ public class DbBackupQuartzJob extends BaseController implements Job {
 		PageData pd = new PageData();
 		try {
 			String kackupPath = DbFH.getDbFH().backup(tableName).toString();// 调用数据库备份
-			if (Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)) {
+			if (Tools.notEmpty(kackupPath) && !Objects.equals("errer", kackupPath)) {
 				pd.put("fhdbId", this.get32UUID()); // 主键
 				pd.put("username", "系统"); // 操作用户
 				pd.put("backupTime", Tools.date2Str(new Date())); // 备份时间
-				pd.put("tableName", tableName.equals("") ? "整库" : tableName); // 表名or整库
+				pd.put("tableName", Objects.equals("", tableName) ? "整库" : tableName); // 表名or整库
 				pd.put("sqlpath", kackupPath); // 存储位置
 				pd.put("dbsize", FileUtil.getFilesize(kackupPath)); // 文件大小
-				pd.put("type", tableName.equals("") ? 1 : 2); // 1: 备份整库，2：备份某表
+				pd.put("type", Objects.equals("", tableName) ? 1 : 2); // 1: 备份整库，2：备份某表
 				pd.put("remark", "定时备份操作"); // 备注
 				brdbService.save(pd); // 存入备份记录
 			} else {

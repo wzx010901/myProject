@@ -11,7 +11,7 @@
 	<sql id="InsertField">
 		jobname,	
 		create_time,	
-		tablename,	
+		table_name as tablename,	
 		status,	
 		fhtime,	
 		timeexplain,	
@@ -19,9 +19,9 @@
 		timingbackup_id
 	</sql>
 	<sql id="SelectField">
-		jobname,	
+		jobname,
 		create_time as createTime,	
-		tablename,	
+		table_name,	
 		status,	
 		fhtime,	
 		timeexplain,	
@@ -97,7 +97,7 @@
 		<if test="pd.keywords!= null and pd.keywords != ''"><!-- 关键词检索 -->
 			and
 				(
-					tablename LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
+					table_name LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%')
 					 or 
 					timeexplain LIKE CONCAT(CONCAT('%', #{pd.keywords}),'%') 
 					 or 

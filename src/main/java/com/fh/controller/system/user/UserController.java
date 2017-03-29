@@ -501,7 +501,7 @@ public class UserController extends BaseController {
 			String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE; // 文件上传路径
 			String fileName = FileUpload.fileUp(file, filePath, "userexcel"); // 执行上传
 			List<PageData> listPd = (List<PageData>) ObjectExcelRead.readExcel(filePath, fileName, 2, 0, 0); // 执行读EXCEL操作,读出的数据导入List
-																									// 2:从第3行开始；0:从第A列开始；0:第0个sheet
+			// 2:从第3行开始；0:从第A列开始；0:第0个sheet
 			/* 存入数据库操作====================================== */
 			pd.put("rights", ""); // 权限
 			pd.put("lastLogin", ""); // 最后登录时间
@@ -548,6 +548,8 @@ public class UserController extends BaseController {
 		mv.setViewName("save_result");
 		return mv;
 	}
+
+	
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {

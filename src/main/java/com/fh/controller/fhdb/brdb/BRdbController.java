@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Resource;
@@ -86,7 +87,7 @@ public class BRdbController extends BaseController {
 		String kackupPath;
 		try {
 			kackupPath = DbFH.getDbFH().backup("").toString(); // 调用数据库备份
-			if (Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)) {
+			if (Tools.notEmpty(kackupPath) && !Objects.equals("errer", kackupPath)) {
 				pd.put("fhdbId", this.get32UUID()); // 主键
 				pd.put("username", username); // 操作用户
 				pd.put("backupTime", Tools.date2Str(new Date())); // 备份时间
@@ -138,7 +139,7 @@ public class BRdbController extends BaseController {
 		String kackupPath;
 		try {
 			kackupPath = DbFH.getDbFH().backup(tableName).toString(); // 调用数据库备份
-			if (Tools.notEmpty(kackupPath) && !"errer".equals(kackupPath)) {
+			if (Tools.notEmpty(kackupPath) && !Objects.equals("errer", kackupPath)) {
 				pd.put("fhdbId", this.get32UUID()); // 主键
 				pd.put("username", username); // 操作用户
 				pd.put("backupTime", Tools.date2Str(new Date())); // 备份时间
@@ -190,7 +191,7 @@ public class BRdbController extends BaseController {
 		String sqlpath = pd.getString("sqlpath"); // 页面ajax传过来的备份文件完整路径
 		try {
 			String returnStr = DbFH.getDbFH().recover(tableName, sqlpath).toString();
-			if ("ok".equals(returnStr)) {
+			if (Objects.equals("ok", returnStr)) {
 				pd.put("msg", "ok");
 			} else {
 				pd.put("msg", "no");
@@ -262,7 +263,7 @@ public class BRdbController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String keywords = pd.getString("keywords"); // 关键词检索条件
-		if (null != keywords && !"".equals(keywords)) {
+		if (null != keywords && !Objects.equals("", keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		String lastStart = pd.getString("lastStart"); // 开始时间
@@ -322,7 +323,7 @@ public class BRdbController extends BaseController {
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String dataIds = pd.getString("dataIds");
-		if (null != dataIds && !"".equals(dataIds)) {
+		if (null != dataIds && !Objects.equals("", dataIds)) {
 			String arrayDataIds[] = dataIds.split(",");
 			brdbService.deleteAll(arrayDataIds);
 			pd.put("msg", "ok");

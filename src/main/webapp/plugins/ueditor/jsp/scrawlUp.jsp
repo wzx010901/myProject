@@ -1,6 +1,6 @@
     <%@ page language="java" contentType="text/html; charset=utf-8"
         pageEncoding="utf-8"%>
-        <%@ page import="Decoder.BASE64Decoder" %>
+       
         <%@ page import="java.io.BufferedReader"%>
     <%@ page import="java.io.IOException"%>
     <%@ page import="java.io.InputStream"%>

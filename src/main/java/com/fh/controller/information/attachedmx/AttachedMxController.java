@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import javax.annotation.Resource;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -99,7 +101,7 @@ public class AttachedMxController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String keywords = pd.getString("keywords");				//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		if(null != keywords && !Objects.equals("", keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		page.setPd(pd);
@@ -156,7 +158,7 @@ public class AttachedMxController extends BaseController {
 		pd = this.getPageData();
 		List<PageData> pdList = new ArrayList<PageData>();
 		String dataIds = pd.getString("dataIds");
-		if(null != dataIds && !"".equals(dataIds)){
+		if(null != dataIds && !Objects.equals("", dataIds)){
 			String arrayDataIds[] = dataIds.split(",");
 			attachedmxService.deleteAll(arrayDataIds);
 			pd.put("msg", "ok");

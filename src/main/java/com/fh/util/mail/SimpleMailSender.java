@@ -53,7 +53,7 @@ public class SimpleMailSender {
 		// Address from = new InternetAddress(mailInfo.getFromAddress());
 		// 设置邮件消息的发送者
 		// mailMessage.setFrom(from);
-		String nick = javax.mail.internet.MimeUtility.encodeText("集珍坊");
+		String nick = javax.mail.internet.MimeUtility.encodeText(mailInfo.getNickName());
 		mailMessage.setFrom(new InternetAddress(nick + " <" + mailInfo.getUsername() + ">"));
 		// 创建邮件的接收者地址，并设置到邮件消息中
 
@@ -96,7 +96,7 @@ public class SimpleMailSender {
 		// 根据session创建一个邮件消息
 		Message mailMessage = new MimeMessage(sendMailSession);
 		// 创建邮件发送者标题
-		String nick = javax.mail.internet.MimeUtility.encodeText("集珍坊");
+		String nick = javax.mail.internet.MimeUtility.encodeText(mailInfo.getNickName());
 		mailMessage.setFrom(new InternetAddress(nick + " <" + mailInfo.getUsername() + ">"));
 		// 创建邮件发送者地址
 		Address[] a = new Address[mailInfo.getToAddress().length];
@@ -152,7 +152,7 @@ public class SimpleMailSender {
 		// 这个类主要是设置邮件
 		MailSenderInfo mailInfo = new MailSenderInfo();
 		mailInfo.setMailServerHost("smtp.qq.com");
-		mailInfo.setMailServerPort("25");
+		mailInfo.setMailServerPort(25);
 		mailInfo.setValidate(true);
 		mailInfo.setUsername("itfather@1b23.com");
 		mailInfo.setPassword("tttt");// 您的邮箱密码
@@ -191,12 +191,7 @@ public class SimpleMailSender {
 	public static void sendEmail(String smtp, String port, String email, String paw, String[] toEmail, String title,
 			String content, String type) throws Exception {
 		// 这个类主要是设置邮件
-		MailSenderInfo mailInfo = new MailSenderInfo();
-		mailInfo.setMailServerHost(smtp);
-		mailInfo.setMailServerPort(port);
-		mailInfo.setValidate(true);
-		mailInfo.setUsername(email);
-		mailInfo.setPassword(paw);
+		MailSenderInfo mailInfo = new MailSenderInfo(smtp, Integer.parseInt(port), email, paw, true);
 		mailInfo.setFromAddress(email);
 		mailInfo.setToAddress(toEmail);
 		mailInfo.setSubject(title);
@@ -208,23 +203,28 @@ public class SimpleMailSender {
 		} else {
 			sms.sendHtmlMail(mailInfo);
 		}
+	}
+
+	/**
+	 * @param mailInfo
+	 *            本邮箱配置
+	 * @param type
+	 *            1：文本格式;2：HTML格式
+	 */
+	public static void sendEmail(MailSenderInfo mailInfo, String type) throws Exception {
+
+		// 这个类主要来发送邮件
+		SimpleMailSender sms = new SimpleMailSender();
+		if ("1".equals(type)) {
+			sms.sendTextMail(mailInfo);
+		} else {
+			sms.sendHtmlMail(mailInfo);
+		}
 
 	}
 
 	public static void main(String[] args) throws Exception {
-		// 这个类主要是设置邮件
-		// mail.smtp.host=smtp.exmail.qq.com
-		// mail.smtp.port=25
-		// username=service@jizhenfang.com
-		// password=jizhenfang_1234
-
 		MailSenderInfo mailInfo = new MailSenderInfo();
-		// mailInfo.setMailServerHost("smtp.exmail.qq.com");
-		// mailInfo.setMailServerPort("25");
-		// mailInfo.setValidate(true);
-		// mailInfo.setUsername("service@jizhenfang.com");
-		// mailInfo.setPassword("QL1o10eh9L1o10xApe");// 您的邮箱密码
-		// mailInfo.setFromAddress("149156999@qq.com");
 		mailInfo.setToAddress(new String[] { "149156999@qq.com", "wzx010901@163.com" });
 		mailInfo.setSubject("设置邮箱标题(添加附件测试)");
 		mailInfo.setContent("设置邮箱内容");

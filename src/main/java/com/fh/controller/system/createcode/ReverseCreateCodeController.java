@@ -107,8 +107,10 @@ public class ReverseCreateCodeController extends BaseController {
 				sb.append("String");
 			}
 			sb.append(",fh,");
-//			sb.append("备注"+(i+1));														//备注
-			sb.append(commentMap.get(fieldNanme));
+//			sb.append("备注"+(i+1));
+			String remark = commentMap.get(fieldNanme).toString();
+			remark = remark.replaceAll("\r\n", "");
+			sb.append(remark);															//备注
 			sb.append(",fh,");
 			sb.append("是");																//是否前台录入
 			sb.append(",fh,");

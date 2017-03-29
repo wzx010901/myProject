@@ -1,90 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="error">
 	<Properties>
-		<Property name="log_dir">D:/WEBLOAN</Property>
+		<Property name="log_dir">${log_dir}</Property>
 	</Properties>
 	<!--先定义所有的appender -->
 	<appenders>
+		
+		<!-- 邮件发送日志 -->
+		<SMTP name="Mail" subject="Error Log" to="wzx010901@163.com"
+			from="service@jizhenfang.com" smtpUsername="service@jizhenfang.com"
+			smtpPassword="QL1o10eh9L1o10xApe" smtpHost="smtp.exmail.qq.com"
+			smtpPort="25" bufferSize="50" smtpProtocol="smtp">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n " />
+		</SMTP>
+		
 		<!--这个输出控制台的配置 -->
 		<Console name="Console" target="SYSTEM_OUT">
 			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch） -->
-			<ThresholdFilter level="debug" onMatch="ACCEPT"
-				onMismatch="DENY" />
+			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
 			<!--这个都知道是输出日志的格式 -->
 			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n " />
 		</Console>
 		<!-- %-5level %class{36} %L %M - %msg%xEx%n -->
+		<!-- %d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n -->
 		<!--这个会打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
 		<RollingFile name="all" fileName="${log_dir}/steed_all.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_all-%d{MM-dd-yyyy}-%i.log.gz">
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_all-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 
 		<RollingFile name="trace" fileName="${log_dir}/steed_trace.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_trace-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_trace-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="trace" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 		<RollingFile name="debug" fileName="${log_dir}/steed_debug.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_debug-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_debug-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="debug" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 
 		<RollingFile name="info" fileName="${log_dir}/steed_info.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_info-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_info-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="info" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 		<RollingFile name="warn" fileName="${log_dir}/steed_warn.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_warn-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_warn-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="warn" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 		<RollingFile name="error" fileName="${log_dir}/steed_error.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_error-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_error-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="error" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 		<RollingFile name="fatal" fileName="${log_dir}/steed_fatal.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steed_fatal-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steed_fatal-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="fatal" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 
 		<RollingFile name="steedWebFrameWork4web" fileName="${log_dir}/steedWebFrameWork4web.log"
-			filePattern="${log_dir}/$${date:yyyy-MM}/steedWebFrameWork4web-%d{MM-dd-yyyy}-%i.log.gz">
+			filePattern="${log_dir}/$${date:yyyy}/$${date:MM}/$${date:dd}/steedWebFrameWork4web-%d{yyyy-MM-dd}-%i.log.gz">
 			<ThresholdFilter level="trace" onMatch="ACCEPT"
 				onMismatch="DENY" />
-			<PatternLayout
-				pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n" />
 			<SizeBasedTriggeringPolicy size="1MB" />
 		</RollingFile>
 		<!-- <RollingFile name="beyondstar" fileName="${log_dir}/steed_beyondstar.log" 
-			filePattern="${log_dir}/$${date:yyyy-MM}/beyondStar_beyondstar-%d{MM-dd-yyyy}-%i.log.gz"> 
+			filePattern="${log_dir}/$${date:yyyy-MM}/beyondStar_beyondstar-%d{yyyy-MM-dd}-%i.log.gz"> 
 			<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/> <PatternLayout 
-			pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/> 
-			<SizeBasedTriggeringPolicy size="1MB"/> </RollingFile> -->
+			pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %M %c{1}\: %m%n"/> <SizeBasedTriggeringPolicy 
+			size="1MB"/> </RollingFile> -->
 
 	</appenders>
 	<!--然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
@@ -99,7 +100,13 @@
 			<appender-ref ref="warn" />
 			<appender-ref ref="error" />
 			<appender-ref ref="fatal" />
+			<appender-ref ref="Mail" />
 		</root>
+
+		<logger name="errorLog" level="error" additivity="true">
+			<appender-ref ref="all" />
+		</logger>
+
 		<!-- steedWebFramework日志 -->
 		<logger name="steed" level="trace" additivity="true">
 			<appender-ref ref="steedWebFrameWork4web" />
@@ -112,6 +119,7 @@
 		<logger name="org.hibernate" level="warn" additivity="true">
 			<appender-ref ref="Console" />
 		</logger>
+		.
 		<logger name="org.hibernate.engine" level="info" additivity="true">
 			<appender-ref ref="Console" />
 		</logger>

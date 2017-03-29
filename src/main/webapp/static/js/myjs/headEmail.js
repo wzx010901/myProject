@@ -109,6 +109,14 @@ function isAll(){
 	}
 }
 
+function isSeparate(){
+	if(document.getElementsByName('form-field-checkbox')[1].checked){
+		$("#isSeparate").val('yes');
+	}else{
+		$("#isSeparate").val('no');
+	}
+}
+
 //编辑邮箱(此方式弃用)
 function editEmail(){
    var email = $("#email").val();

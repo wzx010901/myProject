@@ -4,14 +4,14 @@ $(top.hangge());
 
 //=======================================配置NO3
 function save3(){
-	if($("#Token").val()==""){
-		$("#Token").tips({
+	if($("#token").val()==""){
+		$("#token").tips({
 			side:3,
-            msg:'Token(令牌)',
+            msg:'token(令牌)',
             bg:'#AE81FF',
             time:3
         });
-		$("#Token").focus();
+		$("#token").focus();
 		return false;
 	}
 	$("#Form3").submit();
@@ -20,8 +20,8 @@ function save3(){
 }
 
 //设置站内信声音提示类型
-function setFHsmsSoundType(type){
-	$("#FHsmsSound").val(type);
+function setSmsSoundType(type){
+	$("#smsSound").val(type);
 	if('0' != type){
 		$("#fhsmsobjsys").html('<audio style="display: none;" id="fhsmstsy" src="static/sound/'+type+'.mp3" autoplay controls></audio>');
 	}

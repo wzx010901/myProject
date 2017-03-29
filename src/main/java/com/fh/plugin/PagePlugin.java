@@ -31,6 +31,8 @@ import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.TypeHandler;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 
+
+
 import com.fh.entity.Page;
 import com.fh.util.ReflectHelper;
 import com.fh.util.Tools;
@@ -44,7 +46,7 @@ import com.fh.util.Tools;
 * 修改时间：2016年2月1日
 * @version 1.0
  */
-@Intercepts({@Signature(type=StatementHandler.class,method="prepare",args={Connection.class})})
+@Intercepts({@Signature(type=StatementHandler.class,method="prepare",args={Connection.class,Integer.class})})
 public class PagePlugin implements Interceptor {
 
 	private static String dialect = "";	//数据库方言
@@ -53,6 +55,7 @@ public class PagePlugin implements Interceptor {
 	public Object intercept(Invocation ivk) throws Throwable {
 		// TODO Auto-generated method stub
 		if(ivk.getTarget() instanceof RoutingStatementHandler){
+			
 			RoutingStatementHandler statementHandler = (RoutingStatementHandler)ivk.getTarget();
 			BaseStatementHandler delegate = (BaseStatementHandler) ReflectHelper.getValueByFieldName(statementHandler, "delegate");
 			MappedStatement mappedStatement = (MappedStatement) ReflectHelper.getValueByFieldName(delegate, "mappedStatement");
@@ -64,6 +67,8 @@ public class PagePlugin implements Interceptor {
 					throw new NullPointerException("parameterObject尚未实例化！");
 				}else{
 					Connection connection = (Connection) ivk.getArgs()[0];
+					Integer count1 = (Integer) ivk.getArgs()[1];
+					System.out.println(count1);
 					String sql = boundSql.getSql();
 					//String countSql = "select count(0) from (" + sql+ ") as tmp_count"; //记录统计
 					String fhsql = sql;
@@ -114,6 +119,7 @@ public class PagePlugin implements Interceptor {
 	 * @param parameterObject
 	 * @throws SQLException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void setParameters(PreparedStatement ps,MappedStatement mappedStatement,BoundSql boundSql,Object parameterObject) throws SQLException {
 		ErrorContext.instance().activity("setting parameters").object(mappedStatement.getParameterMap().getId());
 		List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();

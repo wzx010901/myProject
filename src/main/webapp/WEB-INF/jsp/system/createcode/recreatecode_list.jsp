@@ -4,8 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
 <!DOCTYPE html>
@@ -30,73 +29,94 @@
 
 
 
-						<div id="accordion" class="accordion-style1 panel-group" style="margin-top:20px;width: 100%;">
-							<c:if test="${jurisdiction.find == 1 }">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false">
-											<i class="bigger-110 ace-icon fa fa-angle-right" data-icon-hide="ace-icon fa fa-angle-down" data-icon-show="ace-icon fa fa-angle-right"></i>
-											&nbsp;连接数据库
-										</a>
-									</h4>
-								</div>
-
-								<div class="panel-collapse collapse in" id="collapseTwo" aria-expanded="true">
-									<div class="panel-body">
-										<div style="float: left;">
-											<table>
-												<tr>
-													<td id="fhdb">数据库：</td>
-													<td>
-														<select name="dbtype" id="dbtype" data-placeholder="请选择数据库"  style="vertical-align:top;width: 100%;" onchange="selectDb(this.value)">
-															<option value="mysql">Mysql</option>
-															<option value="oracle">Oracle</option>
-															<option value="sqlserver">Sqlserver</option>
-														</select>
-													</td>
-													<td>&nbsp;地址：</td>
-													<td><input type="text" name="dbAddress" id="dbAddress" value="localhost" maxlength="200" placeholder="数据库连接地址" title="数据库连接地址"/></td>
-													<td>&nbsp;端口：</td>
-													<td><input type="number" name="dbport" id="dbport" value="3306"  maxlength="10" placeholder="输入端口" title="端口"/></td>
-												</tr>
-												<tr><td colspan="100" style="height: 5px;"></td></tr>
-												<tr>
-													<td>用户名：</td>
-													<td><input type="text" name="username" id="username" value="root"  maxlength="32" placeholder="输入用户名" title="用户名"/></td>
-													<td>&nbsp;密码：</td>
-													<td><input type="password" name="password" id="password"  maxlength="32" placeholder="输入密码" title="密码"/></td>
-													<td>&nbsp;库名：</td>
-													<td><input type="text" name="databaseName" id="databaseName"  maxlength="32" placeholder="输入数据库名" title="数据库名"/></td>
-												</tr>
-											</table>
+							<div id="accordion" class="accordion-style1 panel-group"
+								style="margin-top: 20px; width: 100%;">
+								<c:if test="${jurisdiction.find == 1 }">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a class="accordion-toggle" data-toggle="collapse"
+													data-parent="#accordion" href="#collapseTwo"
+													aria-expanded="false"> <i
+													class="bigger-110 ace-icon fa fa-angle-right"
+													data-icon-hide="ace-icon fa fa-angle-down"
+													data-icon-show="ace-icon fa fa-angle-right"></i>
+													&nbsp;连接数据库
+												</a>
+											</h4>
 										</div>
-										<div style="float: left;margin-top:15px;margin-left: 20px;">
-											<a class="btn btn-success btn-sm" onclick="connDb();">
-												连接
-											</a>
+
+										<div class="panel-collapse collapse in" id="collapseTwo"
+											aria-expanded="true">
+											<div class="panel-body">
+												<div style="float: left;">
+													<table>
+														<tr>
+															<td id="fhdb">数据库：</td>
+															<td><select name="dbtype" id="dbtype"
+																data-placeholder="请选择数据库"
+																style="vertical-align: top; width: 100%;"
+																onchange="selectDb(this.value)">
+																	<option value="mysql">Mysql</option>
+																	<option value="oracle">Oracle</option>
+																	<option value="sqlserver">Sqlserver</option>
+															</select></td>
+															<td>&nbsp;地址：</td>
+															<td><input type="text" name="dbAddress"
+																id="dbAddress" value="121.43.122.76" maxlength="200"
+																placeholder="数据库连接地址" title="数据库连接地址" /></td>
+															<td>&nbsp;端口：</td>
+															<td><input type="number" name="dbport" id="dbport"
+																value="3306" maxlength="10" placeholder="输入端口"
+																title="端口" /></td>
+														</tr>
+														<tr>
+															<td colspan="100" style="height: 5px;"></td>
+														</tr>
+														<tr>
+															<td>用户名：</td>
+															<td><input type="text" name="username" id="username"
+																value="cmuser" maxlength="32" placeholder="输入用户名"
+																title="用户名" /></td>
+															<td>&nbsp;密码：</td>
+															<td><input type="password" name="password"
+																id="password" value="sss@#werhti07" maxlength="32"
+																placeholder="输入密码" title="密码" /></td>
+															<td>&nbsp;库名：</td>
+															<td><input type="text" name="databaseName"
+																id="databaseName" maxlength="32" value="jizhenfang"
+																placeholder="输入数据库名" title="数据库名" /></td>
+														</tr>
+													</table>
+												</div>
+												<div
+													style="float: left; margin-top: 15px; margin-left: 20px;">
+													<a class="btn btn-success btn-sm" onclick="connDb();">
+														连接 </a>
+												</div>
+											</div>
 										</div>
 									</div>
-								</div>
+								</c:if>
 							</div>
-							</c:if>
-						</div>
 
-						<table id="simple-table" class="table table-striped table-bordered table-hover"  style="margin-top:0px;">
-							<thead>
-								<tr>
-									<th class="center" style="width:50px;">序号</th>
-									<th class='left'>表名</th>
-									<th class="center" style="width:96px;">操作</th>
-								</tr>
-							</thead>
-												
-							<tbody id="valuelist">
-								<tr class='center'>
-									<td colspan="10">数据显示区</td>
-								</tr>
-							</tbody>
-						</table>
+							<table id="simple-table"
+								class="table table-striped table-bordered table-hover"
+								style="margin-top: 0px;">
+								<thead>
+									<tr>
+										<th class="center" style="width: 50px;">序号</th>
+										<th class='left'>表名</th>
+										<th class="center" style="width: 96px;">操作</th>
+									</tr>
+								</thead>
+
+								<tbody id="valuelist">
+									<tr class='center'>
+										<td colspan="10">数据显示区</td>
+									</tr>
+								</tbody>
+							</table>
 
 						</div>
 						<!-- /.col -->
@@ -110,8 +130,9 @@
 
 
 		<!-- 返回顶部 -->
-		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		<a href="#" id="btn-scroll-up"
+			class="btn-scroll-up btn btn-sm btn-inverse"> <i
+			class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 		</a>
 
 	</div>
@@ -243,6 +264,7 @@
 			var dbport = $("#dbport").val();				//端口
 			var username = $("#username").val();			//用户名
 			var password = $("#password").val();			//密码
+			password = password.replace("#", "%23");
 			var databaseName = $("#databaseName").val();	//数据库名
 			databaseName = databaseName.replace("#","%23");
 			databaseName = databaseName.replace("#","%23");
@@ -250,20 +272,21 @@
 			 var diag = new top.Dialog();
 			 diag.Drag=true;
 			 diag.Title ="代码生成器";
-			 diag.URL = '<%=basePath%>recreateCode/goProductCode.do?table='+table+'&dbtype='+dbtype+'&dbAddress='+dbAddress+'&dbport='+dbport+'&username='+username+'&password='+password+'&databaseName='+databaseName;
-			 diag.Width = 800;
-			 diag.Height = 500;
-			 diag.CancelEvent = function(){ //关闭事件
-				if(diag.innerFrame.contentWindow.document.getElementById('zhongxin').style.display == 'none'){
+			 diag.URL = '<%=basePath%>recreateCode/goProductCode.do?table='
+					+ table + '&dbtype=' + dbtype + '&dbAddress=' + dbAddress
+					+ '&dbport=' + dbport + '&username=' + username
+					+ '&password=' + password + '&databaseName=' + databaseName;
+			diag.Width = 800;
+			diag.Height = 500;
+			diag.CancelEvent = function() { //关闭事件
+				if (diag.innerFrame.contentWindow.document
+						.getElementById('zhongxin').style.display == 'none') {
 					top.hangge();
 				}
 				diag.close();
-			 };
-			 diag.show();
+			};
+			diag.show();
 		}
-		
 	</script>
-
-
 </body>
 </html>

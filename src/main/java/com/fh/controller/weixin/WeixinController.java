@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.URL;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +22,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.alibaba.fastjson.JSONObject;
 
 import org.marker.weixin.DefaultSession;
 import org.marker.weixin.HandleMessageAdapter;
@@ -40,19 +41,13 @@ import org.marker.weixin.msg.Msg4Voice;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.alibaba.fastjson.JSONObject;
 import com.fh.controller.base.BaseController;
-
 import com.fh.service.weixin.command.CommandService;
 import com.fh.service.weixin.imgmsg.ImgmsgService;
 import com.fh.service.weixin.textmsg.TextmsgService;
-import com.fh.util.Const;
+import com.fh.util.ConfigUtil;
 import com.fh.util.PageData;
-import com.fh.util.Tools;
-
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.X509TrustManager;
 
 /**
  * 
@@ -67,8 +62,10 @@ public class WeixinController extends BaseController {
 
 	@Resource(name = "textmsgService")
 	private TextmsgService textmsgService;
+
 	@Resource(name = "commandService")
 	private CommandService commandService;
+
 	@Resource(name = "imgmsgService")
 	private ImgmsgService imgmsgService;
 
@@ -100,7 +97,8 @@ public class WeixinController extends BaseController {
 						return this.get(0) + this.get(1) + this.get(2);
 					}
 				};
-				list.add(Tools.readTxtFile(Const.WEIXIN)); // 读取Token(令牌)
+				PageData weixinPageData = ConfigUtil.readWeiXin();
+				list.add(weixinPageData.getString("token")); // 读取Token(令牌)
 				list.add(timestamp);
 				list.add(nonce);
 				Collections.sort(list); // 排序
@@ -358,27 +356,58 @@ public class WeixinController extends BaseController {
 	}
 
 	// 读取文件
+	// public String readTxtFile(String filePath) {
+	// try {
+	// String encoding = "utf-8";
+	// File file = new File(filePath);
+	// if (file.isFile() && file.exists()) { // 判断文件是否存在
+	// InputStreamReader read = new InputStreamReader(new FileInputStream(file),
+	// encoding);// 考虑到编码格式
+	// BufferedReader bufferedReader = new BufferedReader(read);
+	// String lineTxt = null;
+	// while ((lineTxt = bufferedReader.readLine()) != null) {
+	// // System.out.println(lineTxt);
+	// return lineTxt;
+	// }
+	// read.close();
+	// } else {
+	// System.out.println("找不到指定的文件");
+	// }
+	// } catch (Exception e) {
+	// System.out.println("读取文件内容出错");
+	// e.printStackTrace();
+	// }
+	// return "";
+	// }
+
+	// 读取文件
 	public String readTxtFile(String filePath) {
-		try {
-			String encoding = "utf-8";
-			File file = new File(filePath);
-			if (file.isFile() && file.exists()) { // 判断文件是否存在
-				InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
-				BufferedReader bufferedReader = new BufferedReader(read);
+		String encoding = "utf-8";
+		File file = new File(filePath);
+		if (file.isFile() && file.exists()) { // 判断文件是否存在
+			try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), encoding);
+					BufferedReader bufferedReader = new BufferedReader(reader);) {
 				String lineTxt = null;
+				String lineAll = "";
 				while ((lineTxt = bufferedReader.readLine()) != null) {
 					// System.out.println(lineTxt);
-					return lineTxt;
+					lineAll = lineAll + lineTxt + "\n";
 				}
-				read.close();
-			} else {
-				System.out.println("找不到指定的文件");
+				return lineAll;
+			} catch (Exception e) {
+				System.out.println("读取文件内容出错");
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			System.out.println("读取文件内容出错");
-			e.printStackTrace();
+		} else {
+			System.out.println("找不到指定的文件");
 		}
 		return "";
+	}
+
+	public static void main(String[] args) {
+		WeixinController c = new WeixinController();
+		String s = c.readTxtFile("F:/hadoop-3.0.0-alpha1/NOTICE.txt");
+		System.out.println(s);
 	}
 
 	// ================================================获取access_token==============================================================
@@ -462,7 +491,7 @@ public class WeixinController extends BaseController {
 			inputStream.close();
 			inputStream = null;
 			httpUrlConn.disconnect();
-//			jsonobject = JSONObject.fromObject(buffer.toString());
+			// jsonobject = JSONObject.fromObject(buffer.toString());
 
 			jsonobject = JSONObject.parseObject(buffer.toString());
 		} catch (ConnectException ce) {

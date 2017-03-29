@@ -31,4 +31,7 @@ public class Constants {
 		Constants.setPICTURE_VISIT_FILE_PATH("http://192.168.1.225:8888/FH/topic/");
 	}
 	
+	
+	
+	
 }

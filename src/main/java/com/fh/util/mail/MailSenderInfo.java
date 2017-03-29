@@ -2,6 +2,10 @@ package com.fh.util.mail;
 
 import java.util.Properties;
 
+import com.fh.util.Const;
+import com.fh.util.PropertiesUtil;
+import com.fh.util.StringUtil;
+
 /**
  * 发送邮件需要使用的基本信息
  * 
@@ -10,15 +14,16 @@ import java.util.Properties;
  */
 public class MailSenderInfo {
 	// 发送邮件的服务器的IP和端口
-	private String mailServerHost = "smtp.exmail.qq.com";
-	private String mailServerPort = "25";
+	private String mailServerHost = "";
+	private int mailServerPort = 25;
+	// 登陆邮件发送服务器的用户名和密码
+	private String username = "";
+	private String password = "";
+	private String nickName;
 	// 邮件发送者的地址
 	private String fromAddress;
 	// 邮件接收者的地址
 	private String[] toAddress;
-	// 登陆邮件发送服务器的用户名和密码
-	private String username = "service@jizhenfang.com";
-	private String password = "QL1o10eh9L1o10xApe";
 	// 是否需要身份验证
 	private boolean validate = true;
 	// 邮件主题
@@ -27,6 +32,62 @@ public class MailSenderInfo {
 	private String content;
 	// 邮件附件的文件名
 	private String[] attachFileNames;
+
+	public MailSenderInfo() {
+		PropertiesUtil pu = new PropertiesUtil(Const.EMAIL);
+		String smtp = pu.getProperty("smtp");
+		String portString = pu.getProperty("port");
+		int port = Integer.valueOf(portString);
+		String email = pu.getProperty("email");
+		String paw = pu.getProperty("paw");
+		String validateString = pu.getProperty("validate");
+		boolean validate = false;
+		if (!StringUtil.isEmpty(validateString.trim())) {
+			validate = Boolean.valueOf(validateString);
+		}
+		if (StringUtil.isEmpty(this.nickName)) {
+			String nickName = pu.getProperty("nickName");
+			this.nickName = nickName;
+		}
+		this.mailServerHost = smtp;
+		this.mailServerPort = port;
+		this.username = email;
+		this.password = paw;
+		this.validate = validate;
+	}
+
+	public MailSenderInfo(String mailServerHost, int mailServerPort, String username, String password,
+			boolean validate) {
+		this.mailServerHost = mailServerHost;
+		this.mailServerPort = mailServerPort;
+		this.username = username;
+		this.password = password;
+		this.validate = validate;
+	}
+
+	public MailSenderInfo(String filePath) {
+		PropertiesUtil pu = new PropertiesUtil(filePath);
+		String smtp = pu.getProperty("smtp");
+		String portString = pu.getProperty("port");
+		int port = Integer.valueOf(portString);
+		String email = pu.getProperty("email");
+		String paw = pu.getProperty("paw");
+		String validateString = pu.getProperty("validate");
+		boolean validate = false;
+		if (!StringUtil.isEmpty(validateString.trim())) {
+			validate = Boolean.valueOf(validateString);
+		}
+		if (StringUtil.isEmpty(this.nickName)) {
+			String nickName = pu.getProperty("nickName");
+			this.nickName = nickName;
+		}
+		this.mailServerHost = smtp;
+		this.mailServerPort = port;
+		this.username = email;
+		this.password = paw;
+		this.validate = validate;
+
+	}
 
 	/**
 	 * 获得邮件会话属性
@@ -47,11 +108,11 @@ public class MailSenderInfo {
 		this.mailServerHost = mailServerHost;
 	}
 
-	public String getMailServerPort() {
+	public int getMailServerPort() {
 		return mailServerPort;
 	}
 
-	public void setMailServerPort(String mailServerPort) {
+	public void setMailServerPort(int mailServerPort) {
 		this.mailServerPort = mailServerPort;
 	}
 
@@ -118,4 +179,13 @@ public class MailSenderInfo {
 	public void setContent(String textContent) {
 		this.content = textContent;
 	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
 }

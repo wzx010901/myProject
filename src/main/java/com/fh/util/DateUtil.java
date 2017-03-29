@@ -283,20 +283,19 @@ public class DateUtil {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			return new Date();
+			return null;
 		} else {
 			return null;
 		}
 	}
-	
-	
+
 	/**
 	 * 按照yyyy-MM-dd HH:mm:ss的格式，字符串转日期
 	 * 
 	 * @param date
 	 * @return
 	 */
-	public static Date str2Date(String date,String format) {
+	public static Date str2Date(String date, String format) {
 		if (!StringUtil.isEmptyStr(date)) {
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
 			try {
@@ -304,7 +303,7 @@ public class DateUtil {
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			return new Date();
+			return null;
 		} else {
 			return null;
 		}
@@ -495,7 +494,7 @@ public class DateUtil {
 	public static void main(String[] args) {
 		Long l = dateDiff("2016-11-21", "2016-11-20", DateUtil.DATE_FORMATE, "day");
 		System.out.println(l);
-		 
+
 		System.out.println(new Date().after(str2Date("2016-12-20 13:00:00")));
 		// System.out.println(getDays());
 		// System.out.println(getAfterDayWeek("3"));
@@ -514,26 +513,65 @@ public class DateUtil {
 	}
 
 	/**
-	 * 格式化日期字符串
+	 * 获取月份的天数
 	 * 
-	 * @param date
-	 * @param formate
+	 * @param year
+	 * @param month
 	 * @return
 	 */
-	public static String formatStringDate(String date, String formate, String formate1) {
-		Date d = DateUtil.str2Date(date, formate);
-		date = DateUtil.dateToString(d, formate1);
-		return date;
+	public static int getMonthDay(int year, int month) {
+		int days = 0; // 存储当月的天数
+		boolean isRn;
+		/* 判断是否是闰年 */
+		if (year % 4 == 0 && !(year % 100 == 0) || year % 400 == 0) { // 判断是否为闰年
+			isRn = true; // 闰年
+		} else {
+			isRn = false;// 平年
+		}
+		/* 计算当月的天数 */
+		switch (month) {
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			days = 31;
+			break;
+		case 2:
+			if (isRn) {
+				days = 29;
+			} else {
+				days = 28;
+			}
+			break;
+		default:
+			days = 30;
+			break;
+		}
+		return days;
 	}
-	
-	
-	
-	public static String getDayBeforMinute(Date date,int m){
-		Calendar calendar = Calendar.getInstance();    
-		calendar.setTime(date);    
-//		calendar.add(Calendar.YEAR, -1);//当前时间减去一年，即一年前的时间    
-		calendar.add(Calendar.MINUTE, m);//当前时间前去一个月，即一个月前的时间    
-		calendar.getTime();//获取一年前的时间，或者一个月前的时间    
-		return calendarToString(calendar,DATETIME_FORMATE);
+
+	// 日期加一个分钟后的日期代码
+	public static String addDateMinut(String day, int x) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 24小时制
+		Date date = null;
+		try {
+			date = format.parse(day);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		if (date == null)
+			return "";
+		System.out.println("front:" + format.format(date));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MINUTE, x);// 24小时制
+		date = cal.getTime();
+		System.out.println("after:" + format.format(date));
+		cal = null;
+		return format.format(date);
 	}
+
 }

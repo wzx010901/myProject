@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -121,11 +122,11 @@ public class DepartmentController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String keywords = pd.getString("keywords"); // 检索条件
-		if (null != keywords && !"".equals(keywords)) {
+		if (null != keywords && !Objects.equals("", keywords)) {
 			pd.put("keywords", keywords.trim());
 		}
 		String departmentId = null == pd.get("departmentId") ? "" : pd.get("departmentId").toString();
-		if (null != pd.get("id") && !"".equals(pd.get("id").toString())) {
+		if (null != pd.get("id") && !Objects.equals("", pd.get("id").toString())) {
 			departmentId = pd.get("id").toString();
 		}
 		pd.put("departmentId", departmentId); // 上级ID

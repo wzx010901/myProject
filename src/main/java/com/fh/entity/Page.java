@@ -2,7 +2,7 @@ package com.fh.entity;
 
 import com.fh.util.Const;
 import com.fh.util.PageData;
-import com.fh.util.Tools;
+import com.fh.util.PropertiesUtil;
 
 /**
  * 分页类
@@ -24,7 +24,9 @@ public class Page {
 	
 	public Page(){
 		try {
-			this.showCount = Integer.parseInt(Tools.readTxtFile(Const.PAGE));
+			PropertiesUtil pagePropertiesUtil = new PropertiesUtil(Const.PAGE);
+			this.showCount = Integer.parseInt(pagePropertiesUtil.getProperty("countPage"));
+//			this.showCount = Integer.parseInt(Tools.readTxtFile(Const.PAGE));
 		} catch (Exception e) {
 			this.showCount = 15;
 		}

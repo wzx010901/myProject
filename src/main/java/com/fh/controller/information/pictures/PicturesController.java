@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +62,7 @@ public class PicturesController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String KEYW = pd.getString("keyword");	//检索条件
-		if(null != KEYW && !"".equals(KEYW)){
+		if(null != KEYW && !Objects.equals("", KEYW)){
 			pd.put("KEYW", KEYW.trim());
 		}
 		page.setPd(pd);
@@ -95,7 +96,7 @@ public class PicturesController extends BaseController {
 			}else{
 				System.out.println("上传失败");
 			}
-			pd.put("picturesId", this.get32UUID());			//主键
+			pd.put("picturesId", this.get32UUID());				//主键
 			pd.put("title", "图片");								//标题
 			pd.put("name", fileName);							//文件名
 			pd.put("path", ffile + "/" + fileName);				//路径
@@ -219,7 +220,7 @@ public class PicturesController extends BaseController {
 			List<PageData> pdList = new ArrayList<PageData>();
 			List<PageData> pathList = new ArrayList<PageData>();
 			String dataIds = pd.getString("dataIds");
-			if(null != dataIds && !"".equals(dataIds)){
+			if(null != dataIds && !Objects.equals("", dataIds)){
 				String arrayDataIds[] = dataIds.split(",");
 				pathList = picturesService.getAllById(arrayDataIds);
 				for(int i=0;i<pathList.size();i++){
@@ -284,7 +285,7 @@ public class PicturesController extends BaseController {
 		 }else{
 			 try {
 				imgList = GetWeb.getImagePathList(serverUrl);
-				if("save".equals(msg)){
+				if(Objects.equals("save", msg)){
 					String ffile = DateUtil.getDays();
 					String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;		//文件上传路径
 					for(int i=0;i<imgList.size();i++){	//把网络图片保存到服务器硬盘，并数据库记录

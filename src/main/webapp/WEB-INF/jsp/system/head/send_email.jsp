@@ -60,6 +60,8 @@
 		<textarea name="content" id="content" style="display:none" ></textarea>
 		<input type="hidden" name="type" id="type" value="1"/>
 		<input type="hidden" name="isAll" id="isAll" value="no"/>
+		<input type="hidden" name="isSeparate" id="isSeparate" value="no"/>
+		
 		<table style="width:98%;margin-top: 10px;margin-left: 9px;" >
 			<tr>
 				<td style="margin-top:0px;">
@@ -84,6 +86,7 @@
 					<label style="float:left;padding-left: 32px;"><input name="form-field-radio" id="form-field-radio1" onclick="setType('1');" checked="checked" type="radio" class="ace" value="icon-edit"><span class="lbl">纯文本</span></label>
 					<label style="float:left;padding-left: 5px;"><input name="form-field-radio" id="form-field-radio2" onclick="setType('2');" type="radio" value="icon-edit" class="ace" ><span class="lbl">带标签</span></label>
 					<label style="float:left;padding-left: 15px;"><input name="form-field-checkbox" class="ace" type="checkbox" id="allusers" onclick="isAll();" /><span class="lbl">全体用户</span></label>
+					<label style="float:left;padding-left: 15px;"><input name="form-field-checkbox" class="ace" type="checkbox" id="separate" onclick="isSeparate();" /><span class="lbl">是否分开发送</span></label>
 				</td>
 			</tr>
 		</table>

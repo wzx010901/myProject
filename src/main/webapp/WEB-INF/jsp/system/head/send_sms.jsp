@@ -64,7 +64,7 @@
 			<tr>
 				<td style="margin-top:0px;">
 					 <div style="float: left;"><textarea name="phone" id="phone" rows="1" cols="50" style="width:520px;height:32px;" placeholder="请输入对方手机号,多个请用(;)分号隔开" title="请输入对方手机号,多个请用(;)分号隔开">${pd.phone}</textarea></div>
-					 <div style="float: right;margin-right: 25px;"><a class='btn btn-mini btn-info' title="编辑手机号" onclick="dialog_open();"><i class='ace-icon fa fa-pencil-square-o bigger-120'></i></a></div>
+					 <div style="float: right;margin-right: 24px;"><a class='btn btn-mini btn-info' title="编辑手机号" onclick="dialog_open();"><i class='ace-icon fa fa-pencil-square-o bigger-120'></i></a></div>
 				</td>
 			</tr>
 			<tr>

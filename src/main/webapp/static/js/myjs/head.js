@@ -6,7 +6,7 @@ var mid = "fhindex";	//菜单点中状态
 var fhsmsCount = 0;		//站内信总数
 var userId;				//用户ID
 var user = "FH";		//用于即时通讯（ 当前登录用户）
-var TFHsmsSound = '1';	//站内信提示音效
+var TSmsSound = '1';	//站内信提示音效
 var websocket;			//websocket对象
 var wimadress="";		//即时聊天服务器IP和端口
 var oladress="";		//在线管理和站内信服务器IP和端口
@@ -52,7 +52,7 @@ function getHeadMsg(){
 			 });
 			 fhsmsCount = Number(data.fhsmsCount);
 			 $("#fhsmsCount").html(Number(fhsmsCount));	//站内信未读总数
-			 TFHsmsSound = data.FHsmsSound;				//站内信提示音效
+			 TSmsSound = data.smsSound;					//站内信提示音效
 			 wimadress = data.wimadress;				//即时聊天服务器IP和端口
 			 oladress = data.oladress;					//在线管理和站内信服务器IP和端口
 			 online();									//连接在线
@@ -101,7 +101,7 @@ function online(){
 			}else if(message.type == 'senFhsms'){
 				fhsmsCount = Number(fhsmsCount)+1;
 				$("#fhsmsCount").html(Number(fhsmsCount));
-				$("#fhsmsobj").html('<audio style="display: none;" id="fhsmstsy" src="static/sound/'+TFHsmsSound+'.mp3" autoplay controls></audio>');
+				$("#fhsmsobj").html('<audio style="display: none;" id="fhsmstsy" src="static/sound/'+TSmsSound+'.mp3" autoplay controls></audio>');
 				$("#fhsmstss").tips({
 					side:3,
 		            msg:'有新消息',

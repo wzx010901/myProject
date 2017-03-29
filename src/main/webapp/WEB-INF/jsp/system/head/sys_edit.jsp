@@ -78,22 +78,23 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 												<td><input type="email" name="email" id="email" value="${pd.email }" placeholder="请输入邮件服务器邮箱" style="width:90%" title="邮箱"/></td>
 											
 												<td style="width:50px;text-align: right;padding-top: 13px;">密码:</td>
-												<td><input type="password" name="PAW" id="PAW" value="${pd.PAW }" placeholder="请输入邮箱密码" style="width:90%" title="密码"/></td>
+												<td><input type="password" name="paw" id="paw" value="${pd.paw }" placeholder="请输入邮箱密码" style="width:90%" title="密码"/></td>
 											</tr>
 										</table>
 										
 										<table id="table_report" class="table table-striped table-bordered table-hover">
 											<tr>
 												<td style="text-align: center;" colspan="100">
-													短信接口&nbsp;(短信商一&nbsp;<a href="http://www.dxton.com/" target="_blank">官网</a>)
+												<!-- http://www.dxton.com/ -->
+													短信接口&nbsp;(短信商一&nbsp;<a href="https://help.aliyun.com/document_detail/44364.html" target="_blank">官网</a>)
 												</td>
 											</tr>
 											<tr>
-												<td style="width:50px;text-align: right;padding-top: 13px;">账号:</td>
-												<td><input type="email" name="SMSU1" id="SMSU1" value="${pd.SMSU1 }" placeholder="请输入账号" style="width:90%" title="邮箱"/></td>
+												<td style="width:50px;text-align: right;padding-top: 13px;">appkey:</td>
+												<td><input type="email" name="appkey" id="appkey" value="${pd.appkey }" placeholder="请输入账号" style="width:90%" title="邮箱"/></td>
 											
 												<td style="width:50px;text-align: right;padding-top: 13px;">密码:</td>
-												<td><input type="password" name="SMSPAW1" id="SMSPAW1" value="${pd.SMSPAW1 }" placeholder="请输入密码" style="width:90%" title="密码"/></td>
+												<td><input type="password" name="secret" id="secret" value="${pd.secret }" placeholder="请输入密码" style="width:90%" title="密码"/></td>
 											</tr>
 											<tr>
 												<td style="text-align: center;" colspan="100">
@@ -102,10 +103,10 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 											</tr>
 											<tr>
 												<td style="width:50px;text-align: right;padding-top: 13px;">账号:</td>
-												<td><input type="email" name="SMSU2" id="SMSU2" value="${pd.SMSU2 }" placeholder="请输入账号" style="width:90%" title="邮箱"/></td>
+												<td><input type="email" name="smsUsername" id="smsUsername" value="${pd.smsUsername }" placeholder="请输入账号" style="width:90%" title="邮箱"/></td>
 											
 												<td style="width:50px;text-align: right;padding-top: 13px;">密码:</td>
-												<td><input type="password" name="SMSPAW2" id="SMSPAW2" value="${pd.SMSPAW2 }" placeholder="请输入密码" style="width:90%" title="密码"/></td>
+												<td><input type="password" name="smsPassword" id="smsPassword" value="${pd.smsPassword }" placeholder="请输入密码" style="width:90%" title="密码"/></td>
 											</tr>
 										</table>
 								
@@ -182,7 +183,7 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 									  
 									  <div id="profile3" class="tab-pane">
 									  	<form action="head/saveSys3.do" name="Form3" id="Form3" method="post">
-									  	<input type="hidden" value="${pd.FHsmsSound }" id="FHsmsSound" name="FHsmsSound" />
+									  	<input type="hidden" value="${pd.smsSound }" id="smsSound" name="smsSound" />
 										<table id="table_report" class="table table-striped table-bordered table-hover">
 											<tr>
 												<td style="text-align: center;" colspan="100">
@@ -194,8 +195,8 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 												<td><input type="text" name="WXURL" id="WXURL" value="<%=basePath%>weixin/index " disabled="disabled"  style="width:90%" title="URL(服务器地址)必须是域名，ip地址验证通不过"/></td>
 											</tr>
 											<tr>
-												<td style="width:120px;text-align: right;padding-top: 12px;">Token(令牌):</td>
-												<td><input type="text" name="Token" id="Token" value="${pd.Token }"  style="width:90%" title="URL(服务器地址)"/></td>
+												<td style="width:120px;text-align: right;padding-top: 12px;">token(令牌):</td>
+												<td><input type="text" name="token" id="token" value="${pd.token }"  style="width:90%" title="URL(服务器地址)"/></td>
 											</tr>
 										</table>
 										
@@ -207,10 +208,10 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 											</tr>
 											<tr>
 												<td style="width:50px;text-align: right;padding-top: 13px;">地址:</td>
-												<td><input type="text" name="WIMIP" id="WIMIP" value="${pd.WIMIP }" placeholder="请输入服务器地址" style="width:90%" title="服务器地址"/></td>
+												<td><input type="text" name="wimip" id="wimip" value="${pd.wimip }" placeholder="请输入服务器地址" style="width:90%" title="服务器地址"/></td>
 											
 												<td style="width:50px;text-align: right;padding-top: 13px;">端口:</td>
-												<td><input type="number" name="WIMPORT" id="WIMPORT" value="${pd.WIMPORT }" placeholder="端口" style="width:90%" title="端口"/></td>
+												<td><input type="number" name="wimport" id="wimport" value="${pd.wimport }" placeholder="端口" style="width:90%" title="端口"/></td>
 											</tr>
 										</table>
 										
@@ -222,46 +223,46 @@ var jsessionid = "<%=session.getId()%>";  //勿删，uploadify兼容火狐用到
 											</tr>
 											<tr>
 												<td style="width:50px;text-align: right;padding-top: 13px;">地址:</td>
-												<td><input type="text" name="OLIP" id="OLIP" value="${pd.OLIP }" placeholder="请输入服务器地址" style="width:90%" title="服务器地址"/></td>
+												<td><input type="text" name="olip" id="olip" value="${pd.olip }" placeholder="请输入服务器地址" style="width:90%" title="服务器地址"/></td>
 											
 												<td style="width:50px;text-align: right;padding-top: 13px;">端口:</td>
-												<td><input type="number" name="OLPORT" id="OLPORT" value="${pd.OLPORT }" placeholder="端口" style="width:90%" title="端口"/></td>
+												<td><input type="number" name="olport" id="olport" value="${pd.olport }" placeholder="端口" style="width:90%" title="端口"/></td>
 											</tr>
 											<tr class="center">
 												<td colspan="100" class="center">
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 1px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '0' }">checked="checked"</c:if> onclick="setFHsmsSoundType('0');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '0' }">checked="checked"</c:if> onclick="setSmsSoundType('0');"/>
 															<span class="lbl">静音</span>
 														</label>
 													</div>
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 5px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '1' }">checked="checked"</c:if> onclick="setFHsmsSoundType('1');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '1' }">checked="checked"</c:if> onclick="setSmsSoundType('1');"/>
 															<span class="lbl">歪歪音效</span>
 														</label>
 													</div>
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 5px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '2' }">checked="checked"</c:if> onclick="setFHsmsSoundType('2');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '2' }">checked="checked"</c:if> onclick="setSmsSoundType('2');"/>
 															<span class="lbl">美女音效</span>
 														</label>
 													</div>
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 5px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '3' }">checked="checked"</c:if> onclick="setFHsmsSoundType('3');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '3' }">checked="checked"</c:if> onclick="setSmsSoundType('3');"/>
 															<span class="lbl">飞信音效</span>
 														</label>
 													</div>
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 5px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '4' }">checked="checked"</c:if> onclick="setFHsmsSoundType('4');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '4' }">checked="checked"</c:if> onclick="setSmsSoundType('4');"/>
 															<span class="lbl">IOS短信音效</span>
 														</label>
 													</div>
 													<div class="col-sm-9">
 														<label style="float:left;padding-left: 5px;padding-top:7px;">
-															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.FHsmsSound == '5' }">checked="checked"</c:if> onclick="setFHsmsSoundType('5');"/>
+															<input name="form-field-radio2" type="radio" class="ace" id="form-field-radio3" <c:if test="${pd.smsSound == '5' }">checked="checked"</c:if> onclick="setSmsSoundType('5');"/>
 															<span class="lbl">iPhoneQQ音效</span>
 														</label>
 													</div>

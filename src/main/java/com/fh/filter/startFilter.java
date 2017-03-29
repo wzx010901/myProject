@@ -17,21 +17,20 @@ import javax.servlet.ServletResponse;
 
 import org.java_websocket.WebSocketImpl;
 
+import com.fh.controller.base.BaseController;
 import com.fh.plugin.websocketInstantMsg.ChatServer;
 import com.fh.plugin.websocketOnline.OnlineChatServer;
-import com.fh.util.Const;
+import com.fh.util.ConfigUtil;
 import com.fh.util.DbFH;
-import com.fh.util.Tools;
-import com.fh.controller.base.BaseController;
+import com.fh.util.PageData;
 
 /**
- * 启动tomcat时运行此类
- * 创建人：FH wangzhengxing
- * 创建时间：2014年2月17日
+ * 启动tomcat时运行此类 创建人：FH wangzhengxing 创建时间：2014年2月17日
+ * 
  * @version
  */
-public class startFilter extends BaseController implements Filter{
-	
+public class startFilter extends BaseController implements Filter {
+
 	/**
 	 * 初始化
 	 */
@@ -40,53 +39,52 @@ public class startFilter extends BaseController implements Filter{
 		this.startWebsocketOnline();
 		this.reductionDbBackupQuartzState();
 	}
-	
+
 	/**
 	 * 启动即时聊天服务
 	 */
-	public void startWebsocketInstantMsg(){
+	public void startWebsocketInstantMsg() {
 		WebSocketImpl.DEBUG = false;
 		ChatServer s;
 		try {
-			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
-			if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
-				String strIW[] = strWEBSOCKET.split(",fh,");
-				if(strIW.length == 5){
-					s = new ChatServer(Integer.parseInt(strIW[1]));
-					s.start();
-				}
+			// String strWEBSOCKET =
+			// Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
+			PageData webSocketPageData = ConfigUtil.readWebSocket();// 读取WEBSOCKET配置,获取端口配置
+			if (null != webSocketPageData) {
+				s = new ChatServer(Integer.parseInt(webSocketPageData.getString("wimport")));
+				s.start();
+
 			}
-			//System.out.println( "websocket服务器启动,端口" + s.getPort() );
+			// System.out.println( "websocket服务器启动,端口" + s.getPort() );
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 启动在线管理服务
 	 */
-	public void startWebsocketOnline(){
+	public void startWebsocketOnline() {
 		WebSocketImpl.DEBUG = false;
 		OnlineChatServer s;
 		try {
-			String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
-			if(null != strWEBSOCKET && !"".equals(strWEBSOCKET)){
-				String strIW[] = strWEBSOCKET.split(",fh,");
-				if(strIW.length == 5){
-					s = new OnlineChatServer(Integer.parseInt(strIW[3]));
-					s.start();
-				}
+			// String strWEBSOCKET =
+			// Tools.readTxtFile(Const.WEBSOCKET);//读取WEBSOCKET配置,获取端口配置
+			PageData webSocketPageData = ConfigUtil.readWebSocket();// 读取WEBSOCKET配置,获取端口配置
+			if (null != webSocketPageData) {
+				s = new OnlineChatServer(Integer.parseInt(webSocketPageData.getString("olport")));
+				s.start();
 			}
-			//System.out.println( "websocket服务器启动,端口" + s.getPort() );
+			// System.out.println( "websocket服务器启动,端口" + s.getPort() );
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * web容器重启时，所有定时备份状态关闭
 	 */
-	public void reductionDbBackupQuartzState(){
+	public void reductionDbBackupQuartzState() {
 		try {
 			DbFH.executeUpdateFH("update db_timingbackup set status = '2'");
 		} catch (ClassNotFoundException e) {
@@ -97,32 +95,33 @@ public class startFilter extends BaseController implements Filter{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 计时器(废弃)用quartz代替
 	 */
 	public void timer() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 9); // 控制时
-		calendar.set(Calendar.MINUTE, 0); 		// 控制分
-		calendar.set(Calendar.SECOND, 0); 		// 控制秒
-		Date time = calendar.getTime(); 		// 得出执行任务的时间
+		calendar.set(Calendar.MINUTE, 0); // 控制分
+		calendar.set(Calendar.SECOND, 0); // 控制秒
+		Date time = calendar.getTime(); // 得出执行任务的时间
 		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(new TimerTask() {
 			public void run() {
-				//PersonService personService = (PersonService)ApplicationContext.getBean("personService");
-				//System.out.println("-------设定要指定任务--------");
+				// PersonService personService =
+				// (PersonService)ApplicationContext.getBean("personService");
+				// System.out.println("-------设定要指定任务--------");
 			}
-		}, time, 1000*60*60*24);// 这里设定将延时每天固定执行
+		}, time, 1000 * 60 * 60 * 24);// 这里设定将延时每天固定执行
 	}
-	
+
 	public void destroy() {
 		// TODO Auto-generated method stub
 	}
-	
-	public void doFilter(ServletRequest arg0, ServletResponse arg1,
-			FilterChain arg2) throws IOException, ServletException {
+
+	public void doFilter(ServletRequest arg0, ServletResponse arg1, FilterChain arg2)
+			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 	}
-	
+
 }

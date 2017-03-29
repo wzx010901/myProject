@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.Resource;
 
@@ -124,15 +125,15 @@ public class TimingBackUpController extends BaseController {
 		PageData pd = new PageData();
 		pd = this.getPageData();
 		String keywords = pd.getString("keywords");					//关键词检索条件
-		if(null != keywords && !"".equals(keywords)){
+		if(null != keywords && !Objects.equals("", keywords)){
 			pd.put("keywords", keywords.trim());
 		}
 		String lastStart = pd.getString("lastStart");	//开始时间
 		String lastEnd = pd.getString("lastEnd");		//结束时间
-		if(lastStart != null && !"".equals(lastStart)){
+		if(lastStart != null && !Objects.equals("", lastStart)){
 			pd.put("lastStart", lastStart+" 00:00:00");
 		}
-		if(lastEnd != null && !"".equals(lastEnd)){
+		if(lastEnd != null && !Objects.equals("", lastEnd)){
 			pd.put("lastEnd", lastEnd+" 00:00:00");
 		} 
 		page.setPd(pd);
